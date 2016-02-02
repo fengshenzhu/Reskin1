@@ -1,5 +1,5 @@
 # Reskin
-Android换肤：http://eastmoneyandroid.github.io/2016/01/22/android-reskin/
+Android换肤
 
 #### app
   demo项目
