@@ -15,6 +15,8 @@ import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
+ * 自定义View,继承View
+ * <p/>
  * Created by dfl on 2016/1/26.
  * Just For Demo
  */

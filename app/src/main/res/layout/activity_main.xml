@@ -28,4 +28,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"/>
 
+    <skin.demo.CustomLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
 </LinearLayout>

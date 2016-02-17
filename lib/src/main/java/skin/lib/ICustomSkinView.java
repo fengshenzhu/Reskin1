@@ -5,7 +5,7 @@ package skin.lib;
  * <p/>
  * Created by fengshzh on 1/27/16.
  */
-interface ICustomSkinView {
+public interface ICustomSkinView {
 
     /**
      * 初始化换肤关注的属性

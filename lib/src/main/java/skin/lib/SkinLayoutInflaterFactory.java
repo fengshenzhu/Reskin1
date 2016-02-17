@@ -65,7 +65,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     /**
      * 自定义View列表
      */
-    private List<WeakReference<CustomSkinView>> mCustomSkinViews = new ArrayList<>();
+    private List<WeakReference<ICustomSkinView>> mCustomSkinViews = new ArrayList<>();
 
     SkinLayoutInflaterFactory(Activity activity) {
         mContext = activity;
@@ -191,7 +191,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      *
      * @param view 自定义的View
      */
-    void addCustomView(CustomSkinView view) {
+    void addCustomView(ICustomSkinView view) {
         mCustomSkinViews.add(new WeakReference<>(view));
     }
 
@@ -200,8 +200,8 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      *
      * @param view 自定义View
      */
-    void removeCustomView(CustomSkinView view) {
-        for (WeakReference<CustomSkinView> ref : mCustomSkinViews) {
+    void removeCustomView(ICustomSkinView view) {
+        for (WeakReference<ICustomSkinView> ref : mCustomSkinViews) {
             if (ref.get() != null && ref.get() == view) {
                 mCustomSkinViews.remove(ref);
                 return;
@@ -251,7 +251,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
             }
         }
 
-        for (WeakReference<CustomSkinView> ref : mCustomSkinViews) {
+        for (WeakReference<ICustomSkinView> ref : mCustomSkinViews) {
             if (ref.get() != null) {
                 ref.get().reSkin(theme);
             }

@@ -63,7 +63,7 @@ public abstract class BaseSkinActivity extends Activity implements IDynamicViewA
      * @param view 自定义的View
      */
     @Override
-    final public void addCustomView(CustomSkinView view) {
+    final public void addCustomView(ICustomSkinView view) {
         skinLayoutInflaterFactory.addCustomView(view);
     }
 
@@ -72,7 +72,7 @@ public abstract class BaseSkinActivity extends Activity implements IDynamicViewA
      * @param view 自定义的View
      */
     @Override
-    final public void removeCustomView(CustomSkinView view) {
+    final public void removeCustomView(ICustomSkinView view) {
         skinLayoutInflaterFactory.removeCustomView(view);
     }
 }
