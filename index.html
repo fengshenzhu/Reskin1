@@ -44,9 +44,9 @@
 <h4>
 <a id="2-activity" class="anchor" href="#2-activity" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. Activity</h4>
 
-<p>支持换肤功能的Activity需继承<code>BaseActivity</code>。</p>
+<p>支持换肤功能的Activity需继承<code>BaseSkinActivity</code>。</p>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MainActivity</span> <span class="pl-k">extends</span> <span class="pl-e">BaseActivity</span> {
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MainActivity</span> <span class="pl-k">extends</span> <span class="pl-e">BaseSkinActivity</span> {
     <span class="pl-c1">...</span>
 }</pre></div>
 
@@ -70,10 +70,14 @@ addSkinView(tv, attrs);</pre></div>
 <h4>
 <a id="4-自定义view" class="anchor" href="#4-%E8%87%AA%E5%AE%9A%E4%B9%89view" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. 自定义View</h4>
 
-<p>自定义View需继承CustomSkinView，在<code>initSKinRes()</code>初始化属性值，在<code>reSkin()</code>更新属性值，并主动调用<code>invalidate()</code>更新View。</p>
+<ul>
+<li>自定义View继承<code>android.view.View</code>
+</li>
+</ul>
+
+<p>自定义View直接继承CustomSkinView，在<code>initSKinRes()</code>初始化属性值，在<code>reSkin()</code>更新属性值，并主动调用<code>invalidate()</code>更新View。</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">SkinnableView</span> <span class="pl-k">extends</span> <span class="pl-e">CustomSkinView</span> {
-
     <span class="pl-k">private</span> <span class="pl-smi">String</span> mText;
 
     <span class="pl-k">public</span> <span class="pl-en">SkinnableView</span>(<span class="pl-smi">Context</span> <span class="pl-v">context</span>) {
@@ -103,11 +107,6 @@ addSkinView(tv, attrs);</pre></div>
     }
 
     <span class="pl-k">@Override</span>
-    <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onLayout</span>(<span class="pl-k">boolean</span> <span class="pl-v">changed</span>, <span class="pl-k">int</span> <span class="pl-v">left</span>, <span class="pl-k">int</span> <span class="pl-v">top</span>, <span class="pl-k">int</span> <span class="pl-v">right</span>, <span class="pl-k">int</span> <span class="pl-v">bottom</span>) {
-        <span class="pl-c1">...</span>
-    }
-
-    <span class="pl-k">@Override</span>
     <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onDraw</span>(<span class="pl-smi">Canvas</span> <span class="pl-v">canvas</span>) {
         <span class="pl-v">super</span><span class="pl-k">.</span>onDraw(canvas);
         canvas<span class="pl-k">.</span>drawText(mText, <span class="pl-c1">...</span>);
@@ -123,6 +122,64 @@ addSkinView(tv, attrs);</pre></div>
 
         <span class="pl-c">/** 更改属性值后刷新View */</span>
         invalidate();
+    }
+}</pre></div>
+
+<ul>
+<li>自定义View继承其它View</li>
+</ul>
+
+<p>自定义View继承其它View，需要自行实现<code>ICustomSkinView</code>接口，实现<code>initSKinRes()</code>和<code>reSkin()</code>方法。在<code>onAttachedToWindow()</code>和<code>onDetachedFromWindow()</code>添加到换肤管理。</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">CustomLinearLayout</span> <span class="pl-k">extends</span> <span class="pl-e">LinearLayout</span> <span class="pl-k">implements</span> <span class="pl-e">ICustomSkinView</span> {
+    <span class="pl-k">private</span> <span class="pl-k">int</span> mColor;
+
+    <span class="pl-k">public</span> <span class="pl-en">CustomLinearLayout</span>(<span class="pl-smi">Context</span> <span class="pl-v">context</span>) {
+        <span class="pl-v">super</span>(context);
+        initSKinRes();
+    }
+
+    <span class="pl-k">public</span> <span class="pl-en">CustomLinearLayout</span>(<span class="pl-smi">Context</span> <span class="pl-v">context</span>, <span class="pl-smi">AttributeSet</span> <span class="pl-v">attrs</span>) {
+        <span class="pl-v">super</span>(context, attrs);
+        initSKinRes();
+    }
+
+    <span class="pl-k">public</span> <span class="pl-en">CustomLinearLayout</span>(<span class="pl-smi">Context</span> <span class="pl-v">context</span>, <span class="pl-smi">AttributeSet</span> <span class="pl-v">attrs</span>, <span class="pl-k">int</span> <span class="pl-v">defStyleAttr</span>) {
+        <span class="pl-v">super</span>(context, attrs, defStyleAttr);
+        initSKinRes();
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">initSKinRes</span>() {
+        mColor <span class="pl-k">=</span> getResources()<span class="pl-k">.</span>getColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>textColor);
+        <span class="pl-k">if</span> (<span class="pl-smi">SkinManager</span><span class="pl-k">.</span>getTheme() <span class="pl-k">!=</span> <span class="pl-smi">SkinTheme</span><span class="pl-c1"><span class="pl-k">.</span>DEFAULT</span>) {
+            <span class="pl-k">try</span> {
+                mColor <span class="pl-k">=</span> <span class="pl-smi">SkinManager</span><span class="pl-k">.</span>getTheme()<span class="pl-k">.</span>getColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>textColor);
+            } <span class="pl-k">catch</span> (<span class="pl-smi">Resources</span><span class="pl-k">.</span><span class="pl-smi">NotFoundException</span> e) {
+            }
+        }
+        setBackgroundColor(mColor);
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">reSkin</span>(<span class="pl-smi">SkinTheme</span> <span class="pl-v">theme</span>) {
+        <span class="pl-k">try</span> {
+            mColor <span class="pl-k">=</span> theme<span class="pl-k">.</span>getColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>textColor);
+        } <span class="pl-k">catch</span> (<span class="pl-smi">Resources</span><span class="pl-k">.</span><span class="pl-smi">NotFoundException</span> e) {
+        }
+        setBackgroundColor(mColor);
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onAttachedToWindow</span>() {
+        <span class="pl-v">super</span><span class="pl-k">.</span>onAttachedToWindow();
+        ((<span class="pl-smi">BaseSkinActivity</span>) getContext())<span class="pl-k">.</span>addCustomView(<span class="pl-v">this</span>);
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onDetachedFromWindow</span>() {
+        <span class="pl-v">super</span><span class="pl-k">.</span>onDetachedFromWindow();
+        ((<span class="pl-smi">BaseSkinActivity</span>) getContext())<span class="pl-k">.</span>removeCustomView(<span class="pl-v">this</span>);
     }
 }</pre></div>
 
