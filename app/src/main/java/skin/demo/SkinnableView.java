@@ -21,7 +21,6 @@ import skin.lib.SkinTheme;
  * Just For Demo
  */
 public class SkinnableView extends CustomSkinView {
-
     private Rect mDrawRect;
 
     private Rect mFrameRect;

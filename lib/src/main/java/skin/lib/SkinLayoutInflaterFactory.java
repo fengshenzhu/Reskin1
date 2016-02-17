@@ -269,5 +269,4 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
 
         mCustomSkinViews.clear();
     }
-
 }

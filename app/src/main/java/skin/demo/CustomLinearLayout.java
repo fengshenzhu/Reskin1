@@ -16,7 +16,6 @@ import skin.lib.SkinTheme;
  * Created by fengshzh on 16/2/17.
  */
 public class CustomLinearLayout extends LinearLayout implements ICustomSkinView {
-
     private int mColor;
 
     public CustomLinearLayout(Context context) {
@@ -35,21 +34,6 @@ public class CustomLinearLayout extends LinearLayout implements ICustomSkinView 
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        ((BaseSkinActivity) getContext()).addCustomView(this);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        ((BaseSkinActivity) getContext()).removeCustomView(this);
-    }
-
-    /**
-     * 初始化换肤关注的属性
-     */
-    @Override
     public void initSKinRes() {
         mColor = getResources().getColor(R.color.textColor);
 
@@ -63,11 +47,6 @@ public class CustomLinearLayout extends LinearLayout implements ICustomSkinView 
         setBackgroundColor(mColor);
     }
 
-    /**
-     * 自定义View换肤，注意，使用{@link SkinTheme#getId(int)}必须处理异常
-     *
-     * @param theme 当前主题，用于获取该主题下资源
-     */
     @Override
     public void reSkin(SkinTheme theme) {
         try {
@@ -77,4 +56,15 @@ public class CustomLinearLayout extends LinearLayout implements ICustomSkinView 
         setBackgroundColor(mColor);
     }
 
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        ((BaseSkinActivity) getContext()).addCustomView(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        ((BaseSkinActivity) getContext()).removeCustomView(this);
+    }
 }

@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
  * Created by fengshzh on 1/21/16.
  */
 public enum SkinTheme {
-
     /**
      * 默认主题
      */
@@ -114,6 +113,5 @@ public enum SkinTheme {
             return newResId;
         }
     }
-
 }
 

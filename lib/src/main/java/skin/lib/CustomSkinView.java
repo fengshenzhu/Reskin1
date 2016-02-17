@@ -10,7 +10,6 @@ import android.view.View;
  * Created by fengshzh on 1/27/16.
  */
 public abstract class CustomSkinView extends View implements ICustomSkinView {
-
     public CustomSkinView(Context context) {
         super(context);
         initSKinRes();
@@ -37,5 +36,4 @@ public abstract class CustomSkinView extends View implements ICustomSkinView {
         super.onDetachedFromWindow();
         ((BaseSkinActivity) getContext()).removeCustomView(this);
     }
-
 }
