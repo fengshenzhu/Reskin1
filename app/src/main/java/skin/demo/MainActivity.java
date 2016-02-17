@@ -10,10 +10,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import skin.lib.BaseActivity;
+import skin.lib.BaseSkinActivity;
 import skin.lib.DynamicViewAttribute;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseSkinActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

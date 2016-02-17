@@ -11,7 +11,7 @@ interface ICustomViewAdd {
      *
      * @param view 自定义的View
      */
-    void addCustomView(CustomSkinView view);
+    void addCustomView(ICustomSkinView view);
 
-    void removeCustomView(CustomSkinView view);
+    void removeCustomView(ICustomSkinView view);
 }

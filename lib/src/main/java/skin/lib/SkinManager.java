@@ -8,7 +8,6 @@ import android.content.Context;
  * Created by fengshzh on 1/21/16.
  */
 public class SkinManager {
-
     private static Context context;
 
     /**
@@ -53,5 +52,4 @@ public class SkinManager {
         theme = newTheme;
         SkinPreference.setTheme(theme);
     }
-
 }

@@ -11,8 +11,7 @@ import java.util.List;
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
-public abstract class BaseActivity extends Activity implements IDynamicViewAdd, ICustomViewAdd {
-
+public abstract class BaseSkinActivity extends Activity implements IDynamicViewAdd, ICustomViewAdd {
     private SkinLayoutInflaterFactory skinLayoutInflaterFactory;
     private SkinTheme theme = SkinTheme.DEFAULT;
 
@@ -63,7 +62,7 @@ public abstract class BaseActivity extends Activity implements IDynamicViewAdd, 
      * @param view 自定义的View
      */
     @Override
-    final public void addCustomView(CustomSkinView view) {
+    final public void addCustomView(ICustomSkinView view) {
         skinLayoutInflaterFactory.addCustomView(view);
     }
 
@@ -72,7 +71,7 @@ public abstract class BaseActivity extends Activity implements IDynamicViewAdd, 
      * @param view 自定义的View
      */
     @Override
-    final public void removeCustomView(CustomSkinView view) {
+    final public void removeCustomView(ICustomSkinView view) {
         skinLayoutInflaterFactory.removeCustomView(view);
     }
 }

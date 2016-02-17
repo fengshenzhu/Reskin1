@@ -8,12 +8,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import skin.lib.BaseActivity;
+import skin.lib.BaseSkinActivity;
 import skin.lib.DynamicViewAttribute;
 import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
-public class SettingActivity extends BaseActivity {
+public class SettingActivity extends BaseSkinActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

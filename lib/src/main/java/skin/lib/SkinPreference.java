@@ -8,7 +8,6 @@ import android.content.Context;
  * Created by fengshzh on 1/26/16.
  */
 class SkinPreference {
-
     private static Context context;
     private static final String PREF_FILE = "theme";
     private static final String KEY_THEME = "key_theme";
