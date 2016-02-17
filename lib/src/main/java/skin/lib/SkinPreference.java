@@ -27,7 +27,7 @@ class SkinPreference {
     }
 
     /**
-     * 设置新主题
+     * 存储新主题
      *
      * @param skinTheme 新主题
      */

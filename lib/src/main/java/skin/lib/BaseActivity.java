@@ -14,20 +14,29 @@ import java.util.List;
 public abstract class BaseActivity extends Activity implements IDynamicViewAdd, ICustomViewAdd {
 
     private SkinLayoutInflaterFactory skinLayoutInflaterFactory;
+    private SkinTheme theme = SkinTheme.DEFAULT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SkinManager.register(this);
 
         skinLayoutInflaterFactory = new SkinLayoutInflaterFactory(this);
         getLayoutInflater().setFactory(skinLayoutInflaterFactory);
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (theme != SkinManager.getTheme()) {
+            theme = SkinManager.getTheme();
+            reSkin(theme);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        SkinManager.unRegister(this);
 
         skinLayoutInflaterFactory.clear();
     }
@@ -35,20 +44,33 @@ public abstract class BaseActivity extends Activity implements IDynamicViewAdd, 
     /**
      * 当前Activity换肤
      */
-    void reSkin(SkinTheme theme) {
+    protected void reSkin(SkinTheme theme) {
         skinLayoutInflaterFactory.reSkin(theme);
     }
 
+    /**
+     * 手动添加View
+     * @param view  手动new View()
+     * @param attrs 换肤时需要修改的属性
+     */
     @Override
     final public void addSkinView(View view, List<DynamicViewAttribute> attrs) {
         skinLayoutInflaterFactory.addSkinViewIfNecessary(view, attrs);
     }
 
+    /**
+     * 添加自定义View
+     * @param view 自定义的View
+     */
     @Override
     final public void addCustomView(CustomSkinView view) {
         skinLayoutInflaterFactory.addCustomView(view);
     }
 
+    /**
+     * 移除自定义View
+     * @param view 自定义的View
+     */
     @Override
     final public void removeCustomView(CustomSkinView view) {
         skinLayoutInflaterFactory.removeCustomView(view);

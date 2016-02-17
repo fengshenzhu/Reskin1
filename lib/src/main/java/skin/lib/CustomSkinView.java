@@ -13,30 +13,29 @@ public abstract class CustomSkinView extends View implements ICustomSkinView {
 
     public CustomSkinView(Context context) {
         super(context);
+        initSKinRes();
     }
 
     public CustomSkinView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initSKinRes();
     }
 
     public CustomSkinView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initSKinRes();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
         ((BaseActivity) getContext()).addCustomView(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
         ((BaseActivity) getContext()).removeCustomView(this);
     }
 
-    @Override
-    public abstract void reSkin(SkinTheme theme);
 }

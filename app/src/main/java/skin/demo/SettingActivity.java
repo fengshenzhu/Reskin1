@@ -1,9 +1,7 @@
 package skin.demo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,22 +10,25 @@ import java.util.List;
 
 import skin.lib.BaseActivity;
 import skin.lib.DynamicViewAttribute;
+import skin.lib.SkinManager;
+import skin.lib.SkinTheme;
 
-public class MainActivity extends BaseActivity {
+public class SettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((Button)(findViewById(R.id.change_theme))).setText("Setting");
         findViewById(R.id.change_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                SkinTheme targetTheme = SkinManager.getTheme() == SkinTheme.DEFAULT ? SkinTheme.NIGHT
+                        : SkinTheme.DEFAULT;
+                SkinManager.reSkin(targetTheme);
+                reSkin(targetTheme);
             }
         });
 
-        /** 动态添加系统View */
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.root);
         TextView tv = new TextView(this);
         tv.setText("This is a TextView added in code");
@@ -36,13 +37,11 @@ public class MainActivity extends BaseActivity {
         tv.setBackgroundDrawable(getResources().getDrawable(R.drawable.image));
         linearLayout.addView(tv);
 
-        /** 动态添加系统View不走onCreateView,需要手动添加换肤关注属性 */
         List<DynamicViewAttribute> attrs = new ArrayList<>();
         attrs.add(new DynamicViewAttribute("textColor", colorResId));
         attrs.add(new DynamicViewAttribute("background", R.drawable.image));
         addSkinView(tv, attrs);
 
-        /** 动态添加自定义View,换肤由自定义View自实现,Activity不需额外管理 */
         SkinnableView dCView = new SkinnableView(this);
         linearLayout.addView(dCView);
     }
