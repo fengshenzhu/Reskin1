@@ -11,7 +11,7 @@ import java.util.List;
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
-public abstract class BaseActivity extends Activity implements IDynamicViewAdd, ICustomViewAdd {
+public abstract class BaseSkinActivity extends Activity implements IDynamicViewAdd, ICustomViewAdd {
 
     private SkinLayoutInflaterFactory skinLayoutInflaterFactory;
     private SkinTheme theme = SkinTheme.DEFAULT;

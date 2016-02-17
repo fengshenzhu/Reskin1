@@ -29,13 +29,13 @@ public abstract class CustomSkinView extends View implements ICustomSkinView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        ((BaseActivity) getContext()).addCustomView(this);
+        ((BaseSkinActivity) getContext()).addCustomView(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        ((BaseActivity) getContext()).removeCustomView(this);
+        ((BaseSkinActivity) getContext()).removeCustomView(this);
     }
 
 }
