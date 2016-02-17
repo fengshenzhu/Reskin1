@@ -70,9 +70,11 @@ public class CustomLinearLayout extends LinearLayout implements ICustomSkinView 
      */
     @Override
     public void reSkin(SkinTheme theme) {
-        mColor = theme.getColor(R.color.textColor);
+        try {
+            mColor = theme.getColor(R.color.textColor);
+        } catch (Resources.NotFoundException e) {
+        }
         setBackgroundColor(mColor);
     }
-
 
 }
