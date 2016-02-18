@@ -1,7 +1,7 @@
 package skin.lib;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
-public abstract class BaseSkinActivity extends Activity implements IDynamicViewAdd, ICustomViewAdd {
+public abstract class BaseSkinActivity extends FragmentActivity implements IDynamicViewAdd, ICustomViewAdd {
     private SkinLayoutInflaterFactory skinLayoutInflaterFactory;
-    private SkinTheme theme = SkinTheme.DEFAULT;
+    private SkinTheme theme = SkinTheme.DEFAULT; // 记录当前Activity的皮肤
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public abstract class BaseSkinActivity extends Activity implements IDynamicViewA
     /**
      * 当前Activity换肤
      */
-    protected void reSkin(SkinTheme theme) {
+    public void reSkin(SkinTheme theme) {
         skinLayoutInflaterFactory.reSkin(theme);
     }
 

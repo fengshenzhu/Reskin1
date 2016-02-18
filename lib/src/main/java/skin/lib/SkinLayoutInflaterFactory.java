@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -90,6 +89,11 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      */
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
+        // fragment交由系统处理,调用到Fragment.onCreateView()
+        if ("fragment".equals(name)) {
+            return null;
+        }
+
         try {
             View view = createView(name, attrs);
             if (view != null) {
@@ -100,7 +104,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
             e.printStackTrace();
         }
 
-        Log.e(TAG, "Dangerous!!! You may miss view " + name);
+        L.e(TAG, "Dangerous!!! You miss view " + name);
         return null;
     }
 
@@ -120,7 +124,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
             try {
                 View view = mLayoutInflater.createView(name, prefix, attrs);
                 if (view != null) {
-                    Log.d(TAG, "Inflate view success: " + name + ", " + attrs);
+                    L.d(TAG, "Inflate view success: " + name + ", " + attrs);
                     return view;
                 }
             } catch (ClassNotFoundException e) {

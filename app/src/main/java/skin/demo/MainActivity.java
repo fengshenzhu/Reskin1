@@ -3,7 +3,6 @@ package skin.demo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ public class MainActivity extends BaseSkinActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((Button)(findViewById(R.id.change_theme))).setText("Setting");
         findViewById(R.id.change_theme).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

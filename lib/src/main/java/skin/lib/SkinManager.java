@@ -15,6 +15,9 @@ public class SkinManager {
      */
     private static SkinTheme theme;
 
+    private SkinManager() {
+    }
+
     /**
      * 初始化换肤库
      *
