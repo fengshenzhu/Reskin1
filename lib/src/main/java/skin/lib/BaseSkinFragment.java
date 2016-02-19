@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
  * <p/>
  * Created by fengshzh on 16/2/18.
  */
-public class BaseSkinFragment extends Fragment {
+public abstract class BaseSkinFragment extends Fragment {
     private boolean shouldReskin = false; // 记录Fragment创建后需要换肤否,仅用一次
 
     @Override
