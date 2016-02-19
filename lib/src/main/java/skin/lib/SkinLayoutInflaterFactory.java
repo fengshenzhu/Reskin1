@@ -94,18 +94,15 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
             return null;
         }
 
-        try {
-            View view = createView(name, attrs);
-            if (view != null) {
-                addSkinViewIfNecessary(view, attrs);
-                return view;
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        View view = createView(name, attrs);
+
+        if (view != null) {
+            addSkinViewIfNecessary(view, attrs);
+        } else {
+            L.e(TAG, "Dangerous!!! You miss view " + name);
         }
 
-        L.e(TAG, "Dangerous!!! You miss view " + name);
-        return null;
+        return view;
     }
 
 
@@ -116,24 +113,25 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      * @param name  Tag name to be inflated.
      * @param attrs Inflation attributes as specified in XML file.
      * @return View Newly created view. Return null for the default behavior.
-     * @throws ClassNotFoundException
      */
-    private View createView(String name, AttributeSet attrs) throws ClassNotFoundException {
+    private View createView(String name, AttributeSet attrs) {
+        View view = null;
         // from PhoneLayoutInflater
         for (String prefix : sClassPrefixList) {
             try {
-                View view = mLayoutInflater.createView(name, prefix, attrs);
-                if (view != null) {
-                    L.d(TAG, "Inflate view success: " + name + ", " + attrs);
-                    return view;
-                }
-            } catch (ClassNotFoundException e) {
-                // In this case we want to let the base class take a crack
-                // at it.
+                view = mLayoutInflater.createView(name, prefix, attrs);
+            } catch (Exception e) {
             }
         }
 
-        return mLayoutInflater.createView(name, null, attrs);
+        if (view == null) {
+            try {
+                view = mLayoutInflater.createView(name, null, attrs);
+            } catch (Exception e) {
+            }
+        }
+
+        return view;
     }
 
     /**
@@ -150,8 +148,14 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
             String attrName = attrs.getAttributeName(i);
             String attrValue = attrs.getAttributeValue(i);
             if (attrValue.startsWith("@")) {
-                int resId = Integer.parseInt(attrValue.substring(1));
-                addSkinViewIfNecessary(view, attrName, resId);
+                // FIXME: fengshzh 16/2/19 style,暂时捕捉异常
+                // @style="@style/roomRatingBar
+                // @android:style/Widget.ProgressBar.Large
+                try {
+                    int resId = Integer.parseInt(attrValue.substring(1));
+                    addSkinViewIfNecessary(view, attrName, resId);
+                } catch (Exception e) {
+                }
             }
         }
     }
