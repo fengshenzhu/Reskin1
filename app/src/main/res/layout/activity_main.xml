@@ -23,8 +23,7 @@
         style="@style/styleTextView"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="TextView textColor and background drawable"
-        />
+        android:text="TextView textColor in style"/>
 
     <ImageView
         android:layout_width="wrap_content"
