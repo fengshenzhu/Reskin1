@@ -3,7 +3,9 @@ package skin.lib;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,17 +30,30 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     private static final String TAG = "SkinLayoutInflaterFactory";
 
     /**
-     * 换肤支持的属性
-     */
-    private static final String ATTR_TEXT_COLOR = "textColor";
-    private static final String ATTR_SRC = "src";
-    private static final String ATTR_BACKGROUND = "background";
-
-    /**
      * 换肤支持的资源类型
      */
     private static final String RES_DRAWABLE = "drawable";
     private static final String RES_COLOR = "color";
+
+    /**
+     * 换肤支持的属性名
+     */
+    private static final String ATTR_VIEW_BACKGROUND = "background";
+    private static final String ATTR_TEXTVIEW_TEXTCOLOR = "textColor";
+    private static final String ATTR_IMAGEVIEW_SRC = "src";
+
+    /**
+     * 换肤支持的属性id
+     */
+    private final static int[] ATTRS_VIEW = new int[]{
+            android.R.attr.background
+    };
+    private final static int[] ATTRS_TEXTVIEW = new int[]{
+            android.R.attr.textColor
+    };
+    private final static int[] ATTRS_IMAGEVIEW = new int[]{
+            android.R.attr.src
+    };
 
     /**
      * 这几个前缀在xml布局文件中申明View时可省略，但是实例化View要使用Java反射机制调用其构造函数，需要补全类名
@@ -50,6 +65,11 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
             "android.app.",
             "android.view."
     };
+
+    /**
+     * 最小的自定义资源id,区别于系统资源id.大于0x70000000的是自定义资源
+     */
+    private static final int MIN_CUSTOM_RESOURCE_ID = 0x70000000;
 
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -135,40 +155,81 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     }
 
     /**
-     * 记录需要修改主题的View及其属性
+     * 记录需要修改主题的View及其属性,支持style属性
      *
-     * @param view  布局xml中需要修改主题的View
-     * @param attrs 需要修改主题的View的属性
+     * @param view 布局xml中需要修改主题的View
+     * @param set  需要修改主题的View的属性
      */
-    private void addSkinViewIfNecessary(View view, AttributeSet attrs) {
-        // TODO 按View Type遍历还是按attrs遍历，效率待比较
-        // 按attrs遍历
-        int n = attrs.getAttributeCount();
-        for (int i = 0; i < n; i++) {
-            String attrName = attrs.getAttributeName(i);
-            String attrValue = attrs.getAttributeValue(i);
-            if (attrValue.startsWith("@")) {
-                // FIXME: fengshzh 16/2/19 style,暂时捕捉异常
-                // @style="@style/roomRatingBar
-                // @android:style/Widget.ProgressBar.Large
-                try {
-                    int resId = Integer.parseInt(attrValue.substring(1));
-                    addSkinViewIfNecessary(view, attrName, resId);
-                } catch (Exception e) {
+    private void addSkinViewIfNecessary(View view, AttributeSet set) {
+        // View
+        int[] viewResIds = getResIds(set, ATTRS_VIEW);
+        for (int i = 0; i < viewResIds.length; i++) {
+            if (viewResIds[i] > MIN_CUSTOM_RESOURCE_ID) {
+                switch (i) {
+                    case 0:
+                        addSkinView(view, ATTR_VIEW_BACKGROUND, viewResIds[i]);
+                        break;
+                }
+            }
+        }
+
+        // TextView
+        if (view instanceof TextView) {
+            int[] textViewResIds = getResIds(set, ATTRS_TEXTVIEW);
+            for (int i = 0; i < textViewResIds.length; i++) {
+                if (textViewResIds[i] > MIN_CUSTOM_RESOURCE_ID) {
+                    switch (i) {
+                        case 0:
+                            addSkinView(view, ATTR_TEXTVIEW_TEXTCOLOR, textViewResIds[i]);
+                            break;
+                    }
+                }
+            }
+        }
+
+        //ImageView
+        if (view instanceof ImageView) {
+            int[] imageViewResIds = getResIds(set, ATTRS_IMAGEVIEW);
+            for (int i = 0; i < imageViewResIds.length; i++) {
+                if (imageViewResIds[i] > MIN_CUSTOM_RESOURCE_ID) {
+                    switch (i) {
+                        case 0:
+                            addSkinView(view, ATTR_IMAGEVIEW_SRC, imageViewResIds[i]);
+                            break;
+                    }
                 }
             }
         }
     }
 
+    private int[] getResIds(AttributeSet set, int[] attrs) {
+        int[] resIds = new int[attrs.length];
+        for (int i = 0; i < resIds.length; i++) {
+            resIds[i] = -1;
+        }
+
+        TypedArray typedArray = mContext.obtainStyledAttributes(set, attrs);
+        TypedValue value;
+        for (int i = 0; i < resIds.length; i++) {
+            value = typedArray.peekValue(i);
+            if (value != null) {
+                resIds[i] = value.resourceId;
+            }
+        }
+        typedArray.recycle();
+
+        return resIds;
+    }
+
     /**
-     * 记录需要修改主题的View及其属性
+     * 记录需要修改主题的动态添加View及其属性
      *
      * @param view  动态添加的需要修改主题的View
      * @param attrs 需要修改主题的View的属性
      */
     void addSkinViewIfNecessary(View view, List<DynamicViewAttribute> attrs) {
         for (DynamicViewAttribute attr : attrs) {
-            addSkinViewIfNecessary(view, attr.attrName, attr.resId);
+            addSkinView(view, attr.attrName, attr.resId);
         }
     }
 
@@ -179,16 +240,16 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      * @param attrName 换肤属性
      * @param resId    默认资源id
      */
-    private void addSkinViewIfNecessary(View view, String attrName, int resId) {
+    private void addSkinView(View view, String attrName, int resId) {
         switch (attrName) {
-            case ATTR_BACKGROUND:
+            case ATTR_VIEW_BACKGROUND:
                 String typeName = mContext.getResources().getResourceTypeName(resId);
                 mViewBackgroundItems.add(new ViewBackgroundItem(view, resId, typeName));
                 break;
-            case ATTR_TEXT_COLOR:
+            case ATTR_TEXTVIEW_TEXTCOLOR:
                 mTextViewTextColorItems.add(new TextViewTextColorItem((TextView) view, resId));
                 break;
-            case ATTR_SRC:
+            case ATTR_IMAGEVIEW_SRC:
                 mImageViewSrcItems.add(new ImageViewSrcItem((ImageView) view, resId));
                 break;
         }
