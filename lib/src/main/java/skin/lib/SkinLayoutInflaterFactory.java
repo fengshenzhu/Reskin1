@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import skin.lib.item.ImageViewSrcItem;
+import skin.lib.item.TextViewCompoundDrawablesItem;
 import skin.lib.item.TextViewTextColorItem;
 import skin.lib.item.ViewBackgroundItem;
 
@@ -40,6 +41,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      */
     private static final String ATTR_VIEW_BACKGROUND = "background";
     private static final String ATTR_TEXTVIEW_TEXTCOLOR = "textColor";
+    private static final String ATTR_TEXTVIEW_COMPOUNDDRAWABLES = "compoundDrawables";
     private static final String ATTR_IMAGEVIEW_SRC = "src";
 
     /**
@@ -48,8 +50,13 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     private final static int[] ATTRS_VIEW = new int[]{
             android.R.attr.background
     };
+    // Top/Bottom一定要放在数组中Left/Right前面,否则Top/Bottom的peekValue为null
     private final static int[] ATTRS_TEXTVIEW = new int[]{
-            android.R.attr.textColor
+            android.R.attr.textColor,
+            android.R.attr.drawableTop,
+            android.R.attr.drawableBottom,
+            android.R.attr.drawableLeft,
+            android.R.attr.drawableRight
     };
     private final static int[] ATTRS_IMAGEVIEW = new int[]{
             android.R.attr.src
@@ -79,6 +86,8 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      */
     private List<ViewBackgroundItem> mViewBackgroundItems = new ArrayList<>();
     private List<TextViewTextColorItem> mTextViewTextColorItems = new ArrayList<>();
+    private List<TextViewCompoundDrawablesItem> mTextViewTextViewCompoundDrawablesItems = new
+            ArrayList<>();
     private List<ImageViewSrcItem> mImageViewSrcItems = new ArrayList<>();
 
     /**
@@ -176,15 +185,37 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
         // TextView
         if (view instanceof TextView) {
             int[] textViewResIds = getResIds(set, ATTRS_TEXTVIEW);
+            int[] compoundDrawableResIds = new int[]{-1, -1, -1, -1};
+            boolean compundValid = false;
             for (int i = 0; i < textViewResIds.length; i++) {
                 if (textViewResIds[i] > MIN_CUSTOM_RESOURCE_ID) {
                     switch (i) {
                         case 0:
                             addSkinView(view, ATTR_TEXTVIEW_TEXTCOLOR, textViewResIds[i]);
                             break;
+                        case 1:
+                            compoundDrawableResIds[0] = textViewResIds[i];
+                            compundValid = true;
+                            break;
+                        case 2:
+                            compoundDrawableResIds[1] = textViewResIds[i];
+                            compundValid = true;
+                            break;
+                        case 3:
+                            compoundDrawableResIds[2] = textViewResIds[i];
+                            compundValid = true;
+                            break;
+                        case 4:
+                            compoundDrawableResIds[3] = textViewResIds[i];
+                            compundValid = true;
+                            break;
                     }
                 }
             }
+            if (compundValid) {
+                addSkinView(view, ATTR_TEXTVIEW_COMPOUNDDRAWABLES, compoundDrawableResIds);
+            }
+
         }
 
         //ImageView
@@ -256,6 +287,22 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     }
 
     /**
+     * 添加View到换肤管理列表(多个资源id)
+     *
+     * @param view     view
+     * @param attrName 换肤属性
+     * @param resIds   默认资源id
+     */
+    private void addSkinView(View view, String attrName, int[] resIds) {
+        switch (attrName) {
+            case ATTR_TEXTVIEW_COMPOUNDDRAWABLES:
+                mTextViewTextViewCompoundDrawablesItems.add(new TextViewCompoundDrawablesItem(
+                        (TextView) view, resIds[2], resIds[0], resIds[3], resIds[1]));
+                break;
+        }
+    }
+
+    /**
      * 记录需要修改主题的View及其属性
      *
      * @param view 自定义的View
@@ -287,6 +334,25 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
             if (textView != null) {
                 try {
                     textView.setTextColor(theme.getColor(item.resId));
+                } catch (Resources.NotFoundException e) {
+                    // 找不到主题资源不改变属性值，异常不处理。以下异常捕捉处同。
+                }
+            }
+        }
+
+        for (TextViewCompoundDrawablesItem item : mTextViewTextViewCompoundDrawablesItems) {
+            TextView textView = item.view.get();
+            if (textView != null) {
+                try {
+                    textView.setCompoundDrawablesWithIntrinsicBounds(
+                            item.leftDrawableResId > 0 ? theme.getDrawable(item
+                                    .leftDrawableResId) : null,
+                            item.topDrawableResId > 0 ? theme.getDrawable(item.topDrawableResId)
+                                    : null,
+                            item.rightDrawableResId > 0 ? theme.getDrawable(item
+                                    .rightDrawableResId) : null,
+                            item.bottomDrawableResId > 0 ? theme.getDrawable(item
+                                    .bottomDrawableResId) : null);
                 } catch (Resources.NotFoundException e) {
                     // 找不到主题资源不改变属性值，异常不处理。以下异常捕捉处同。
                 }
