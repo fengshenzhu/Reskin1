@@ -14,7 +14,7 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/image"
         android:text="TextView textColor and background drawable"
         android:textColor="@color/textColor"/>
@@ -22,12 +22,16 @@
     <TextView
         style="@style/styleTextView"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="TextView textColor in style"/>
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/image"
+        android:drawableRight="@drawable/image"
+        android:drawableTop="@drawable/image"
+        android:drawableBottom="@drawable/image"
+        android:text="TextView textColor in style (drawable Left/Top/Right/Bottom)"/>
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:src="@drawable/image"/>
 
     <skin.demo.SkinnableView

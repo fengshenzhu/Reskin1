@@ -8,7 +8,7 @@ import android.util.Log;
  * Created by fengshzh on 16/2/18.
  */
 public class L {
-    private static boolean debug = false;
+    private static boolean debug = true;
 
     private L() {
     }
