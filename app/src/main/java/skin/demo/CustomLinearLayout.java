@@ -10,12 +10,12 @@ import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
- * 自定义View,原来非直接继承View的,现要实现{@link ICustomSkinView}
+ * 原自定义View并非直接继承{@link android.view.View}的,需实现{@link ICustomSkinView}
  * <p/>
  * 要支持换肤,需:
  * 1. {@link #onAttachedToWindow()}添加View到换肤管理,并初始化View的主题
  * 2. {@link #onDetachedFromWindow()} ()}将View从换肤管理中移除
- * 3. 具体实现{@link #reSkin(SkinTheme)}方法,获取主题资源并设置
+ * 3. 实现{@link #reSkin(SkinTheme)}方法,获取主题资源并设置
  * <p/>
  * Created by fengshzh on 16/2/17.
  */

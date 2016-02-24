@@ -14,7 +14,7 @@ import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
- * 自定义View,原来直接继承View的先继承CustomSkinView
+ * 自定义View,原来直接继承View的,可继承CustomSkinView支持换肤
  * <p/>
  * 添加换肤支持只需修改{@link #onDraw(Canvas)},获取主题资源并设置
  * <p/>
@@ -82,7 +82,7 @@ public class SkinnableView extends CustomSkinView {
         /** 1. 获取主题 */
         SkinTheme theme = SkinManager.getTheme();
         /** 2. 获取主题资源 */
-        /** 2.1 Color/Drawable可直接通过Theme获取 */
+        /** 2.1 Color/Drawable可直接通过SkinTheme获取 */
         int color = theme.getColor(R.color.textColor);
         Drawable mImage = theme.getDrawable(R.drawable.image);
         /** 2.2 其它资源也支持换肤,不过要通过theme.getId()来获取主题资源的id,再通过系统的Resource获取主题资源 */
