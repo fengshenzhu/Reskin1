@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
 /**
- * 皮肤主题，支持的皮肤主题和资源后缀在次设置
+ * 皮肤主题，支持的皮肤主题和资源后缀在此设置
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
@@ -24,8 +24,13 @@ public enum SkinTheme {
      */
     NIGHT("_night") {
         @Override
-        int getId(int resId, String defType) throws Resources.NotFoundException {
-            return getNewResId(resId, getSuffix(), defType);
+        int getId(int resId, String defType) {
+            int newResId = resId;
+            try {
+                newResId = getNewResId(resId, getSuffix(), defType);
+            } catch (Resources.NotFoundException e) {
+            }
+            return newResId;
         }
     };
 
@@ -53,8 +58,7 @@ public enum SkinTheme {
      *
      * @param resId   默认主题资源id
      * @param defType 资源类型
-     * @return 主题下资源id
-     * @throws Resources.NotFoundException Throws NotFoundException if the given ID invalid.
+     * @return 主题下资源id, 找不到资源时返回默认主题资源id
      */
     abstract int getId(int resId, String defType);
 
@@ -62,10 +66,9 @@ public enum SkinTheme {
      * 获取主题下资源id
      *
      * @param resId 默认主题资源id
-     * @return 主题下资源id
-     * @throws Resources.NotFoundException Throws NotFoundException if the given ID invalid.
+     * @return 主题下资源id, 找不到资源时返回默认主题资源id
      */
-    public int getId(int resId) throws Resources.NotFoundException {
+    public int getId(int resId) {
         return getId(resId, SkinManager.getContext().getResources().getResourceTypeName(resId));
     }
 
