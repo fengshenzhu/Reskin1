@@ -2,7 +2,6 @@ package skin.lib;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -29,12 +28,6 @@ import skin.lib.item.ViewBackgroundItem;
  */
 class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     private static final String TAG = "SkinLayoutInflaterFactory";
-
-    /**
-     * 换肤支持的资源类型
-     */
-    private static final String RES_DRAWABLE = "drawable";
-    private static final String RES_COLOR = "color";
 
     /**
      * 换肤支持的属性名
@@ -86,7 +79,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      */
     private List<ViewBackgroundItem> mViewBackgroundItems = new ArrayList<>();
     private List<TextViewTextColorItem> mTextViewTextColorItems = new ArrayList<>();
-    private List<TextViewCompoundDrawablesItem> mTextViewTextViewCompoundDrawablesItems = new
+    private List<TextViewCompoundDrawablesItem> mTextViewCompoundDrawablesItems = new
             ArrayList<>();
     private List<ImageViewSrcItem> mImageViewSrcItems = new ArrayList<>();
 
@@ -296,7 +289,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     private void addSkinView(View view, String attrName, int[] resIds) {
         switch (attrName) {
             case ATTR_TEXTVIEW_COMPOUNDDRAWABLES:
-                mTextViewTextViewCompoundDrawablesItems.add(new TextViewCompoundDrawablesItem(
+                mTextViewCompoundDrawablesItems.add(new TextViewCompoundDrawablesItem(
                         (TextView) view, resIds[2], resIds[0], resIds[3], resIds[1]));
                 break;
         }
@@ -329,69 +322,25 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      * 修改主题
      */
     void reSkin(SkinTheme theme) {
-        for (TextViewTextColorItem item : mTextViewTextColorItems) {
-            TextView textView = item.view.get();
-            if (textView != null) {
-                try {
-                    textView.setTextColor(theme.getColor(item.resId));
-                } catch (Resources.NotFoundException e) {
-                    // 找不到主题资源不改变属性值，异常不处理。以下异常捕捉处同。
-                }
-            }
-        }
-
-        for (TextViewCompoundDrawablesItem item : mTextViewTextViewCompoundDrawablesItems) {
-            TextView textView = item.view.get();
-            if (textView != null) {
-                try {
-                    textView.setCompoundDrawablesWithIntrinsicBounds(
-                            item.leftDrawableResId > 0 ? theme.getDrawable(item
-                                    .leftDrawableResId) : null,
-                            item.topDrawableResId > 0 ? theme.getDrawable(item.topDrawableResId)
-                                    : null,
-                            item.rightDrawableResId > 0 ? theme.getDrawable(item
-                                    .rightDrawableResId) : null,
-                            item.bottomDrawableResId > 0 ? theme.getDrawable(item
-                                    .bottomDrawableResId) : null);
-                } catch (Resources.NotFoundException e) {
-                    // 找不到主题资源不改变属性值，异常不处理。以下异常捕捉处同。
-                }
-            }
-        }
-
-        for (ImageViewSrcItem item : mImageViewSrcItems) {
-            ImageView imageView = item.view.get();
-            if (imageView != null) {
-                try {
-                    imageView.setImageDrawable(theme.getDrawable(item.resId));
-                } catch (Resources.NotFoundException e) {
-                }
-            }
-        }
-
         for (ViewBackgroundItem item : mViewBackgroundItems) {
-            View view = item.view.get();
-            if (view != null) {
-                if (item.typeName.equals(RES_COLOR)) {
-                    try {
-                        view.setBackgroundColor(theme.getColor(item.resId));
-                    } catch (Resources.NotFoundException e) {
-                    }
-                } else if (item.typeName.equals(RES_DRAWABLE)) {
-                    try {
-                        view.setBackgroundDrawable(theme.getDrawable(item.resId));
-                    } catch (Resources.NotFoundException e) {
-                    }
-                }
-            }
+            item.reSkin(theme);
+        }
+        for (TextViewTextColorItem item : mTextViewTextColorItems) {
+            item.reSkin(theme);
+        }
+        for (TextViewCompoundDrawablesItem item : mTextViewCompoundDrawablesItems) {
+            item.reSkin(theme);
+        }
+        for (ImageViewSrcItem item : mImageViewSrcItems) {
+            item.reSkin(theme);
         }
 
         for (WeakReference<ICustomSkinView> ref : mCustomSkinViews) {
-            if (ref.get() != null) {
-                ref.get().reSkin(theme);
+            ICustomSkinView view = ref.get();
+            if (view != null) {
+                view.reSkin(theme);
             }
         }
-
     }
 
     /**
@@ -400,6 +349,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     void clear() {
         mViewBackgroundItems.clear();
         mTextViewTextColorItems.clear();
+        mTextViewCompoundDrawablesItems.clear();
         mImageViewSrcItems.clear();
 
         mCustomSkinViews.clear();

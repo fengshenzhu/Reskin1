@@ -1,8 +1,11 @@
 package skin.lib.item;
 
+import android.content.res.Resources;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
+
+import skin.lib.SkinTheme;
 
 /**
  * TextView drawableLeft/drawableTop/drawableRight/drawableBottom属性换肤item
@@ -25,5 +28,20 @@ public class TextViewCompoundDrawablesItem extends BaseSkinItem {
         this.topDrawableResId = topDrawableResId;
         this.rightDrawableResId = rightDrawableResId;
         this.bottomDrawableResId = bottomDrawableResId;
+    }
+
+    @Override
+    public void reSkin(SkinTheme theme) {
+        TextView textView = view.get();
+        if (textView != null) {
+            try {
+                textView.setCompoundDrawablesWithIntrinsicBounds(
+                        leftDrawableResId > 0 ? theme.getDrawable(leftDrawableResId) : null,
+                        topDrawableResId > 0 ? theme.getDrawable(topDrawableResId) : null,
+                        rightDrawableResId > 0 ? theme.getDrawable(rightDrawableResId) : null,
+                        bottomDrawableResId > 0 ? theme.getDrawable(bottomDrawableResId) : null);
+            } catch (Resources.NotFoundException e) {
+            }
+        }
     }
 }
