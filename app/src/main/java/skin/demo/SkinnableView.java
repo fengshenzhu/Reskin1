@@ -14,7 +14,9 @@ import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
- * 自定义View,继承View
+ * 自定义View,原来直接继承View的先继承CustomSkinView
+ * <p/>
+ * 添加换肤支持只需修改{@link #onDraw(Canvas)},获取主题资源并设置
  * <p/>
  * Created by dfl on 2016/1/26.
  * Just For Demo
@@ -67,16 +69,30 @@ public class SkinnableView extends CustomSkinView {
         mTextRect.set(mFrameRect.left, mFrameRect.top, mFrameRect.centerX(), mFrameRect.centerY());
     }
 
+    /**
+     * 自定义View实现换肤,由换肤库主动调用View的invalidate()方法,View只需在onDraw()里重新获取当前主题下的资源
+     * 步骤:
+     * 1. 获取主题
+     * 2. 获取主题资源
+     * 3. 设置主题资源
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        /** 1. 获取主题 */
         SkinTheme theme = SkinManager.getTheme();
-        String mText = getResources().getString(theme.getId(R.string.demo_text));
+        /** 2. 获取主题资源 */
+        /** 2.1 Color/Drawable可直接通过Theme获取 */
+        int color = theme.getColor(R.color.textColor);
         Drawable mImage = theme.getDrawable(R.drawable.image);
+        /** 2.2 其它资源也支持换肤,不过要通过theme.getId()来获取主题资源的id,再通过系统的Resource获取主题资源 */
+        // 有了这,text都可以换掉啦!
+        String mText = getResources().getString(theme.getId(R.string.demo_text));
 
+        /** 3. 设置主题资源 */
         mImage.setBounds(mFrameRect);
         mImage.draw(canvas);
-        mPaint.setColor(theme.getColor(R.color.textColor));
+        mPaint.setColor(color);
         canvas.drawText(mText, mTextRect.centerX(), mTextRect.centerY() + mPaint.getFontMetrics()
                 .descent, mPaint);
     }
