@@ -12,17 +12,14 @@ import android.view.View;
 public abstract class CustomSkinView extends View implements ICustomSkinView {
     public CustomSkinView(Context context) {
         super(context);
-        initSKinRes();
     }
 
     public CustomSkinView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initSKinRes();
     }
 
     public CustomSkinView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initSKinRes();
     }
 
     @Override
@@ -35,5 +32,10 @@ public abstract class CustomSkinView extends View implements ICustomSkinView {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         ((BaseSkinActivity) getContext()).removeCustomView(this);
+    }
+
+    @Override
+    public void reSkin(SkinTheme theme) {
+        invalidate();
     }
 }

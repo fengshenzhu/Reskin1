@@ -1,7 +1,6 @@
 package skin.demo;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -22,15 +21,9 @@ import skin.lib.SkinTheme;
  */
 public class SkinnableView extends CustomSkinView {
     private Rect mDrawRect;
-
     private Rect mFrameRect;
     private RectF mTextRect;
-
     private Paint mPaint;
-
-    private Drawable mImage;
-    private String mText;
-    private int mColor;
 
     public SkinnableView(Context context) {
         super(context);
@@ -45,28 +38,6 @@ public class SkinnableView extends CustomSkinView {
     public SkinnableView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
-    }
-
-    @Override
-    public void initSKinRes() {
-        /** 赋值:系统默认值 */
-        mImage = getResources().getDrawable(R.drawable.image);
-        mText = getResources().getString(R.string.demo_text);
-        mColor = getResources().getColor(R.color.textColor);
-
-        /** 若当前主题不是默认主题,需要更改属性值 */
-        if (SkinManager.getTheme() != SkinTheme.DEFAULT) {
-            /** 可对每次获取主题资源都用try catch,避免一个资源找不到时接下来的语句不执行了 */
-            try {
-                mText = getResources().getString(SkinManager.getTheme().getId(R.string.demo_text));
-                mColor = SkinManager.getTheme().getColor(R.color.textColor);
-            } catch (Resources.NotFoundException e) {
-            }
-            try {
-                mImage = SkinManager.getTheme().getDrawable(R.drawable.image);
-            } catch (Resources.NotFoundException e) {
-            }
-        }
     }
 
     private void init() {
@@ -99,25 +70,15 @@ public class SkinnableView extends CustomSkinView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        SkinTheme theme = SkinManager.getTheme();
+        String mText = getResources().getString(theme.getId(R.string.demo_text));
+        Drawable mImage = theme.getDrawable(R.drawable.image);
+
         mImage.setBounds(mFrameRect);
         mImage.draw(canvas);
-        mPaint.setColor(mColor);
+        mPaint.setColor(theme.getColor(R.color.textColor));
         canvas.drawText(mText, mTextRect.centerX(), mTextRect.centerY() + mPaint.getFontMetrics()
                 .descent, mPaint);
-    }
-
-    @Override
-    public void reSkin(SkinTheme theme) {
-        /** 必须try catch资源找不到时的异常，异常可不处理 */
-        try {
-            mText = getResources().getString(theme.getId(R.string.demo_text));
-            mColor = theme.getColor(R.color.textColor);
-            mImage = theme.getDrawable(R.drawable.image);
-        } catch (Resources.NotFoundException e) {
-        }
-
-        /** 更改属性值后刷新View */
-        invalidate();
     }
 }
 

@@ -20,31 +20,14 @@ public class CustomLinearLayout extends LinearLayout implements ICustomSkinView 
 
     public CustomLinearLayout(Context context) {
         super(context);
-        initSKinRes();
     }
 
     public CustomLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initSKinRes();
     }
 
     public CustomLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initSKinRes();
-    }
-
-    @Override
-    public void initSKinRes() {
-        mColor = getResources().getColor(R.color.textColor);
-
-        if (SkinManager.getTheme() != SkinTheme.DEFAULT) {
-            try {
-                mColor = SkinManager.getTheme().getColor(R.color.textColor);
-            } catch (Resources.NotFoundException e) {
-            }
-        }
-
-        setBackgroundColor(mColor);
     }
 
     @Override
@@ -60,6 +43,7 @@ public class CustomLinearLayout extends LinearLayout implements ICustomSkinView 
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         ((BaseSkinActivity) getContext()).addCustomView(this);
+        reSkin(SkinManager.getTheme());
     }
 
     @Override
