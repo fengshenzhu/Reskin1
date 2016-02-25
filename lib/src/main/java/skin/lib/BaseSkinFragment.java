@@ -9,7 +9,7 @@ import android.support.v4.app.Fragment;
  * Created by fengshzh on 16/2/18.
  */
 public abstract class BaseSkinFragment extends Fragment {
-    private boolean shouldReskin = false; // 记录Fragment创建后需要换肤否,仅用一次
+    private boolean shouldReskin = false; // Fragment创建后是否需要换肤,仅用一次
 
     @Override
     public void onAttach(Context context) {
@@ -24,6 +24,7 @@ public abstract class BaseSkinFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (shouldReskin) {
+            shouldReskin = false;
             ((BaseSkinActivity) getActivity()).reSkin(SkinManager.getTheme());
         }
     }
