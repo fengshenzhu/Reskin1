@@ -130,7 +130,7 @@ addSkinView(tv, attrs);</pre></div>
 <h6>
 <a id="--实现ondraw" class="anchor" href="#--%E5%AE%9E%E7%8E%B0ondraw" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>- 实现onDraw()</h6>
 
-<p>实现了onDraw()的自定义View，修改让其继承自CustomSkinView，在onDraw()里获取主题资源并设置。</p>
+<p>实现了onDraw()的自定义View，修改让其继承自CustomSkinView，在setSkinTheme()根据主题初始化资源，在onDraw()里设置资源。</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">SkinnableView</span> <span class="pl-k">extends</span> <span class="pl-e">CustomSkinView</span> {
     <span class="pl-k">int</span> mColor;
