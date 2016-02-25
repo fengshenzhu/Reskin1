@@ -5,7 +5,7 @@ import android.view.View;
 import java.util.List;
 
 /**
- * 管理支持换肤的手动new View()接口,有手动添加View的Activity需实现此接口
+ * 管理支持换肤的手动new View()add到布局的接口,有手动添加非自定义View的Activity需实现此接口
  * <p/>
  * Created by fengshzh on 1/27/16.
  */

@@ -7,7 +7,7 @@ import android.graphics.Canvas;
  * <p/>
  * 1. 原View实现了{@link android.view.View#onDraw(Canvas)},继承{@link CustomSkinView}实现换肤
  * <p/>
- * 2. 其它,需实现此接口,并实现以下:
+ * 2. 其它,需实现此接口,并实现:
  * (1). 在{@link android.view.ViewGroup#onAttachedToWindow()}添加View到换肤管理,并初始化View的主题
  * 如:
  * @Override protected void onAttachedToWindow() {
