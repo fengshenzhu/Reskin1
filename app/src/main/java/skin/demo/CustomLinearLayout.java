@@ -3,6 +3,7 @@ package skin.demo;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+import android.graphics.Canvas;
 
 import skin.lib.BaseSkinActivity;
 import skin.lib.ICustomSkinView;
@@ -10,12 +11,7 @@ import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
- * 原自定义View并非直接继承{@link android.view.View}的,需实现{@link ICustomSkinView}
- * <p/>
- * 要支持换肤,需:
- * 1. {@link #onAttachedToWindow()}添加View到换肤管理,并初始化View的主题
- * 2. {@link #onDetachedFromWindow()} ()}将View从换肤管理中移除
- * 3. 实现{@link #reSkin(SkinTheme)}方法,获取主题资源并设置
+ * 自定义View,未实现{@link android.view.View#onDraw(Canvas)}
  * <p/>
  * Created by fengshzh on 16/2/17.
  */

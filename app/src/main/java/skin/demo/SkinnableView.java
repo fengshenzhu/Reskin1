@@ -10,13 +10,10 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 
 import skin.lib.CustomSkinView;
-import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
- * 自定义View,原来直接继承View的,可继承CustomSkinView支持换肤
- * <p/>
- * 添加换肤支持只需修改{@link #onDraw(Canvas)},获取主题资源并设置
+ * 自定义View,实现了{@link android.view.View#onDraw(Canvas)}
  * <p/>
  * Created by dfl on 2016/1/26.
  * Just For Demo
@@ -70,29 +67,39 @@ public class SkinnableView extends CustomSkinView {
     }
 
     /**
-     * 自定义View实现换肤,由换肤库主动调用View的invalidate()方法,View只需在onDraw()里重新获取当前主题下的资源
-     * 步骤:
-     * 1. 获取主题
-     * 2. 获取主题资源
-     * 3. 设置主题资源
+     * 换肤资源,需设置成全局变量,在{@link #setSkinTheme(SkinTheme)}初始化,在{@link #onDraw(Canvas)}使用
+     */
+    int mColor;
+    Drawable mImage;
+    String mText;
+
+    /**
+     * 获取主题资源
+     *
+     * @param theme 主题
+     */
+    @Override
+    protected void setSkinTheme(SkinTheme theme) {
+        /** Color/Drawable可直接通过SkinTheme获取 */
+        mColor = theme.getColor(R.color.textColor);
+        mImage = theme.getDrawable(R.drawable.image);
+
+        /** 其它资源也支持换肤,通过theme.getId()来获取主题资源的id,再通过系统的Resource获取主题资源 */
+        // 有了这,text都可以换掉啦!
+        mText = getResources().getString(theme.getId(R.string.demo_text));
+    }
+
+    /**
+     * 设置主题资源
      */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        /** 1. 获取主题 */
-        SkinTheme theme = SkinManager.getTheme();
-        /** 2. 获取主题资源 */
-        /** 2.1 Color/Drawable可直接通过SkinTheme获取 */
-        int color = theme.getColor(R.color.textColor);
-        Drawable mImage = theme.getDrawable(R.drawable.image);
-        /** 2.2 其它资源也支持换肤,不过要通过theme.getId()来获取主题资源的id,再通过系统的Resource获取主题资源 */
-        // 有了这,text都可以换掉啦!
-        String mText = getResources().getString(theme.getId(R.string.demo_text));
 
-        /** 3. 设置主题资源 */
+        /** 设置主题资源 */
         mImage.setBounds(mFrameRect);
         mImage.draw(canvas);
-        mPaint.setColor(color);
+        mPaint.setColor(mColor);
         canvas.drawText(mText, mTextRect.centerX(), mTextRect.centerY() + mPaint.getFontMetrics()
                 .descent, mPaint);
     }
