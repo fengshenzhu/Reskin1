@@ -1,5 +1,6 @@
 package skin.lib;
 
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
@@ -12,7 +13,7 @@ public enum SkinTheme {
     /**
      * 默认主题
      */
-    DEFAULT("") {
+    DEFAULT("", "经典主题") {
         @Override
         int getId(int resId, String defType) {
             return resId;
@@ -20,28 +21,52 @@ public enum SkinTheme {
     },
 
     /**
-     * 夜间主题
+     * 日间主题
      */
-    NIGHT("_night") {
+    WHITE("_whitemode", "白色主题") {
         @Override
         int getId(int resId, String defType) {
             int newResId = resId;
             try {
-                newResId = getNewResId(resId, getSuffix(), defType);
+                newResId = getNewResId(resId, getThemeSuffix(), defType);
+            } catch (Resources.NotFoundException e) {
+            }
+            return newResId;
+        }
+    },
+
+    /**
+     * 夜间主题
+     */
+    BLACK("_blackmode", "黑色主题") {
+        @Override
+        int getId(int resId, String defType) {
+            int newResId = resId;
+            try {
+                newResId = getNewResId(resId, getThemeSuffix(), defType);
             } catch (Resources.NotFoundException e) {
             }
             return newResId;
         }
     };
 
-
     /**
      * 主题资源后缀名
      */
-    private String suffix;
+    private String mThemeSuffix;
 
-    SkinTheme(String suffix) {
-        this.suffix = suffix;
+    /**
+     * 主题名字
+     */
+    private String mThemeName;
+
+    SkinTheme(String suffix, String themeName) {
+        mThemeSuffix = suffix;
+        mThemeName = themeName;
+    }
+
+    public String getThemeName() {
+        return mThemeName;
     }
 
     /**
@@ -49,8 +74,8 @@ public enum SkinTheme {
      *
      * @return 后缀
      */
-    public String getSuffix() {
-        return suffix;
+    public String getThemeSuffix() {
+        return mThemeSuffix;
     }
 
     /**
@@ -82,6 +107,18 @@ public enum SkinTheme {
     public int getColor(int resId) throws Resources.NotFoundException {
         int newResId = getId(resId, "color");
         return SkinManager.getContext().getResources().getColor(newResId);
+    }
+
+    /**
+     * 获取主题下ColorStateList值
+     *
+     * @param resId 默认主题资源id
+     * @return 主题下ColorStateList值
+     * @throws Resources.NotFoundException Throws NotFoundException if new resource id invalid.
+     */
+    public ColorStateList getColorStateList(int resId) throws Resources.NotFoundException {
+        int newResId = getId(resId, "color");
+        return SkinManager.getContext().getResources().getColorStateList(newResId);
     }
 
     /**

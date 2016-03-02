@@ -5,27 +5,30 @@ import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
 
+import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
- * ImageView src属性换肤item
+ * ImageView_src换肤item,支持@drawable类型资源
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
 public class ImageViewSrcItem extends BaseSkinItem {
-    public WeakReference<ImageView> view;
+    private WeakReference<ImageView> mView;
 
     public ImageViewSrcItem(ImageView view, int resId) {
-        this.view = new WeakReference<>(view);
-        this.resId = resId;
+        mView = new WeakReference<>(view);
+        mResId = resId;
+
+        reSkinIfNecessary(SkinManager.getTheme());
     }
 
     @Override
-    public void reSkin(SkinTheme theme) {
-        ImageView imageView = view.get();
+    protected void reSkin(SkinTheme theme) {
+        ImageView imageView = mView.get();
         if (imageView != null) {
             try {
-                imageView.setImageDrawable(theme.getDrawable(resId));
+                imageView.setImageDrawable(theme.getDrawable(mResId));
             } catch (Resources.NotFoundException e) {
             }
         }

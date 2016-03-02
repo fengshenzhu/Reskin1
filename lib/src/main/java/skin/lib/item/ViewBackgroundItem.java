@@ -5,35 +5,38 @@ import android.view.View;
 
 import java.lang.ref.WeakReference;
 
+import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
- * View background换肤item
+ * View_background换肤item,支持@color/@drawable类型资源
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
 public class ViewBackgroundItem extends BaseSkinItem {
-    public WeakReference<View> view;
-    public String typeName;
+    private WeakReference<View> mView;
+    private String mTypeName;
 
     public ViewBackgroundItem(View view, int resId, String typeName) {
-        this.view = new WeakReference<>(view);
-        this.resId = resId;
-        this.typeName = typeName;
+        mView = new WeakReference<>(view);
+        mResId = resId;
+        mTypeName = typeName;
+
+        reSkinIfNecessary(SkinManager.getTheme());
     }
 
     @Override
-    public void reSkin(SkinTheme theme) {
-        View view = this.view.get();
+    protected void reSkin(SkinTheme theme) {
+        View view = mView.get();
         if (view != null) {
-            if (typeName.equals(RES_COLOR)) {
+            if (mTypeName.equals(RES_COLOR)) {
                 try {
-                    view.setBackgroundColor(theme.getColor(resId));
+                    view.setBackgroundColor(theme.getColor(mResId));
                 } catch (Resources.NotFoundException e) {
                 }
-            } else if (typeName.equals(RES_DRAWABLE)) {
+            } else if (mTypeName.equals(RES_DRAWABLE)) {
                 try {
-                    view.setBackgroundDrawable(theme.getDrawable(resId));
+                    view.setBackgroundDrawable(theme.getDrawable(mResId));
                 } catch (Resources.NotFoundException e) {
                 }
             }

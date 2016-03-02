@@ -5,41 +5,44 @@ import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 
+import skin.lib.SkinManager;
 import skin.lib.SkinTheme;
 
 /**
- * TextView drawableLeft/drawableTop/drawableRight/drawableBottom属性换肤item
+ * TextView_drawableLeft/drawableTop/drawableRight/drawableBottom换肤item,支持@drawable类型资源
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
 public class TextViewCompoundDrawablesItem extends BaseSkinItem {
-    public WeakReference<TextView> view;
+    private WeakReference<TextView> mView;
 
     // drawable resource id, 值为-1时无效,更新CompoundDrawable时应传null
-    public int leftDrawableResId;
-    public int topDrawableResId;
-    public int rightDrawableResId;
-    public int bottomDrawableResId;
+    private int mLeftDrawableResId;
+    private int mTtopDrawableResId;
+    private int mRightDrawableResId;
+    private int mBottomDrawableResId;
 
     public TextViewCompoundDrawablesItem(TextView view, int leftDrawableResId, int
             topDrawableResId, int rightDrawableResId, int bottomDrawableResId) {
-        this.view = new WeakReference<>(view);
-        this.leftDrawableResId = leftDrawableResId;
-        this.topDrawableResId = topDrawableResId;
-        this.rightDrawableResId = rightDrawableResId;
-        this.bottomDrawableResId = bottomDrawableResId;
+        mView = new WeakReference<>(view);
+        mLeftDrawableResId = leftDrawableResId;
+        mTtopDrawableResId = topDrawableResId;
+        mRightDrawableResId = rightDrawableResId;
+        mBottomDrawableResId = bottomDrawableResId;
+
+        reSkinIfNecessary(SkinManager.getTheme());
     }
 
     @Override
-    public void reSkin(SkinTheme theme) {
-        TextView textView = view.get();
+    protected void reSkin(SkinTheme theme) {
+        TextView textView = mView.get();
         if (textView != null) {
             try {
                 textView.setCompoundDrawablesWithIntrinsicBounds(
-                        leftDrawableResId > 0 ? theme.getDrawable(leftDrawableResId) : null,
-                        topDrawableResId > 0 ? theme.getDrawable(topDrawableResId) : null,
-                        rightDrawableResId > 0 ? theme.getDrawable(rightDrawableResId) : null,
-                        bottomDrawableResId > 0 ? theme.getDrawable(bottomDrawableResId) : null);
+                        mLeftDrawableResId > 0 ? theme.getDrawable(mLeftDrawableResId) : null,
+                        mTtopDrawableResId > 0 ? theme.getDrawable(mTtopDrawableResId) : null,
+                        mRightDrawableResId > 0 ? theme.getDrawable(mRightDrawableResId) : null,
+                        mBottomDrawableResId > 0 ? theme.getDrawable(mBottomDrawableResId) : null);
             } catch (Resources.NotFoundException e) {
             }
         }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.Toolbar
+    android:id="@+id/toolbar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_marginBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/reskin_default"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/image"
+            android:text="换肤(默认)"
+            android:textAllCaps="false"
+            android:textColor="@color/textColor"/>
+
+        <Button
+            android:id="@+id/reskin_white"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/image"
+            android:text="换肤(白)"
+            android:textAllCaps="false"
+            android:textColor="@color/textColor"/>
+
+        <Button
+            android:id="@+id/reskin_black"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/image"
+            android:text="换肤(黑)"
+            android:textAllCaps="false"
+            android:textColor="@color/textColor"/>
+    </LinearLayout>
+</android.widget.Toolbar>

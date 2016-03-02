@@ -8,12 +8,12 @@ import android.content.Context;
  * Created by fengshzh on 1/21/16.
  */
 public class SkinManager {
-    private static Context context;
+    private static Context mContext;
 
     /**
      * 当前主题
      */
-    private static SkinTheme theme;
+    private static SkinTheme mTheme;
 
     private SkinManager() {
     }
@@ -24,13 +24,13 @@ public class SkinManager {
      * @param context
      */
     public static void init(Context context) {
-        SkinManager.context = context;
+        mContext = context;
         SkinPreference.init(context.getApplicationContext());
-        theme = SkinPreference.getTheme();
+        mTheme = SkinPreference.getTheme();
     }
 
     static Context getContext() {
-        return context;
+        return mContext;
     }
 
     /**
@@ -39,20 +39,24 @@ public class SkinManager {
      * @return 当前全局主题
      */
     public static SkinTheme getTheme() {
-        return theme;
+        return mTheme;
     }
 
     /**
      * 设置全局主题
+     * 注意: 换肤的Activity里如果有Fragment,Fragment的换肤将不会触发,显现出bug
      *
      * @param newTheme 换肤目标全局主题
+     * @param activity 触发换肤所在Activity
      */
-    public static void reSkin(SkinTheme newTheme) {
-        if (newTheme == theme) {
+    public static void reSkin(SkinTheme newTheme, BaseSkinActivity activity) {
+        if (newTheme == mTheme) {
             return;
         }
+        mTheme = newTheme;
 
-        theme = newTheme;
-        SkinPreference.setTheme(theme);
+        activity.reSkin(mTheme);
+
+        SkinPreference.setTheme(mTheme);
     }
 }

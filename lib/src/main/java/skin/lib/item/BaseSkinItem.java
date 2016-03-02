@@ -3,18 +3,27 @@ package skin.lib.item;
 import skin.lib.SkinTheme;
 
 /**
- * 换肤view及其属性记录的基类
+ * Android原生View换肤item的基类,记录view及其属性
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
 public abstract class BaseSkinItem {
     /**
-     * 换肤支持的资源类型
+     * 原生View换肤支持的资源类型
      */
     protected static final String RES_DRAWABLE = "drawable";
     protected static final String RES_COLOR = "color";
 
-    public int resId;
+    protected int mResId;
 
-    public abstract void reSkin(SkinTheme theme);
+    private SkinTheme mTheme = SkinTheme.DEFAULT;
+
+    final public void reSkinIfNecessary(SkinTheme theme) {
+        if (mTheme != theme) {
+            mTheme = theme;
+            reSkin(mTheme);
+        }
+    }
+
+    abstract void reSkin(SkinTheme theme);
 }
