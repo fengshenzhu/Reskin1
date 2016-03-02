@@ -80,6 +80,7 @@ public abstract class BaseSkinActivity extends FragmentActivity implements IDyna
      */
     void reSkin(SkinTheme theme) {
         long aTime = System.currentTimeMillis();
+        mTheme = theme;
         mSkinLayoutInflaterFactory.reSkin(theme);
         L.d(TAG, this.getClass().getSimpleName() + " reSkin cost time: " + (System
                 .currentTimeMillis() - aTime));

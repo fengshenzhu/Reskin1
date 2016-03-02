@@ -82,6 +82,7 @@ public abstract class BaseSkinFragment extends Fragment implements IDynamicViewA
      */
     public void reSkin(SkinTheme theme) {
         long aTime = System.currentTimeMillis();
+        mTheme = theme;
         mSkinLayoutInflaterFactory.reSkin(theme);
         L.d(TAG, this.getClass().getSimpleName() + " reSkin cost time: " + (System
                 .currentTimeMillis() - aTime));
