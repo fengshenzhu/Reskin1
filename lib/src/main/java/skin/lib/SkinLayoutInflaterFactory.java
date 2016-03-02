@@ -2,10 +2,12 @@ package skin.lib;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -144,7 +146,13 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
         View view = createView(name, attrs);
 
         if (view != null) {
-            addSkinViewIfNecessary(view, attrs);
+            if (view instanceof ViewStub) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    ((ViewStub) view).setLayoutInflater(mLayoutInflater);
+                }
+            } else {
+                addSkinViewIfNecessary(view, attrs);
+            }
         } else {
             L.e(TAG, "Dangerous!!! You miss view " + name);
         }
