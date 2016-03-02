@@ -37,9 +37,9 @@
 <h2>
 <a id="1-换肤主题" class="anchor" href="#1-%E6%8D%A2%E8%82%A4%E4%B8%BB%E9%A2%98" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1 换肤主题</h2>
 
-<p>换肤主题在<code>SkinTheme</code>里枚举定义。库默认定义了两个主题-默认主题和夜间主题。要扩展主题只需仿照NIGHT，传入后缀名即可：</p>
+<p>换肤主题在<code>SkinTheme</code>里枚举定义。库默认定义了三个主题-默认主题、日间主题和夜间主题。要扩展主题只需仿照BLACK，传入后缀名即可：</p>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-c1">THIRD</span>(<span class="pl-s"><span class="pl-pds">"</span>_third<span class="pl-pds">"</span></span>) {
+<div class="highlight highlight-source-java"><pre><span class="pl-c1">BLACK</span>(<span class="pl-s"><span class="pl-pds">"</span>_blackmode<span class="pl-pds">"</span></span>) {
     @<span class="pl-smi">Override</span>
     <span class="pl-k">int</span> getId(<span class="pl-k">int</span> resId, <span class="pl-smi">String</span> defType) {
         <span class="pl-k">return</span> getNewResId(resId, getSuffix(), defType);
@@ -54,10 +54,10 @@
 <p>换肤资源的定义只需注意资源的命名。将换肤资源命名为默认资源+换肤主题后缀即可。如color值：</p>
 
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>textColor<span class="pl-pds">"</span></span>&gt;#FF4081&lt;/<span class="pl-ent">color</span>&gt;
-&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>textColor_night<span class="pl-pds">"</span></span>&gt;#3F51B5&lt;/<span class="pl-ent">color</span>&gt;
-&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>textColor_third<span class="pl-pds">"</span></span>&gt;#8F5230&lt;/<span class="pl-ent">color</span>&gt;</pre></div>
+&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>textColor_whitemode<span class="pl-pds">"</span></span>&gt;#3F51B5&lt;/<span class="pl-ent">color</span>&gt;
+&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>textColor_blackmode<span class="pl-pds">"</span></span>&gt;#8F5230&lt;/<span class="pl-ent">color</span>&gt;</pre></div>
 
-<p>图片资源命名，如image.png对应的夜间主题资源为image_night.png。</p>
+<p>图片资源命名，如image.png对应的夜间主题资源为image_blackmode.png。</p>
 
 <h2>
 <a id="3-实现换肤" class="anchor" href="#3-%E5%AE%9E%E7%8E%B0%E6%8D%A2%E8%82%A4" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3 实现换肤</h2>
@@ -80,19 +80,23 @@
     <span class="pl-c1">...</span>
 }</pre></div>
 
+<p>Activity里需使用LayoutInflate的，应通过当前Activity的<code>getLayoutInfater()</code>获取。</p>
+
 <h4>
 <a id="33-fragment" class="anchor" href="#33-fragment" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.3 Fragment</h4>
 
-<p>支持换肤功能的Fragment需继承<code>BaseSkinFragment</code>。在<code>onCreateView()</code>时设置Fragment布局，应使用Activity的LayoutInflater(<code>getActivity().getLayoutInflater()</code>/<code>LayoutInflater.from(getActivity())</code>)。</p>
+<p>支持换肤功能的Fragment需继承<code>BaseSkinFragment</code>。在<code>onCreateView()</code>时设置Fragment布局，应使用参数里提供的<code>infalter</code>。</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">MyFragment</span> <span class="pl-k">extends</span> <span class="pl-e">BaseSkinFragment</span> {
     <span class="pl-c1">...</span>
     <span class="pl-k">@Override</span>
     <span class="pl-k">public</span> <span class="pl-smi">View</span> <span class="pl-en">onCreateView</span>(<span class="pl-smi">LayoutInflater</span> <span class="pl-v">inflater</span>, <span class="pl-smi">ViewGroup</span> <span class="pl-v">container</span>, <span class="pl-smi">Bundle</span> <span class="pl-v">savedInstanceState</span>) {
-        <span class="pl-k">return</span> getActivity()<span class="pl-k">.</span>getLayoutInflater()<span class="pl-k">.</span>inflate(<span class="pl-smi">R</span><span class="pl-k">.</span>layout<span class="pl-k">.</span>fragment_b, container, <span class="pl-c1">false</span>);
+        <span class="pl-k">return</span> inflater<span class="pl-k">.</span>inflate(<span class="pl-smi">R</span><span class="pl-k">.</span>layout<span class="pl-k">.</span>fragment_b, container, <span class="pl-c1">false</span>);
     }
     <span class="pl-c1">...</span>
 }</pre></div>
+
+<p>Fragment里其它地方需使用LayoutInflate的，应通过当前Fragment的<code>getLayoutInfater(null)</code>获取。</p>
 
 <h4>
 <a id="34-view" class="anchor" href="#34-view" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.4 View</h4>
@@ -122,75 +126,167 @@ linearLayout<span class="pl-k">.</span>addView(tv);
 attrs<span class="pl-k">.</span>add(<span class="pl-k">new</span> <span class="pl-smi">DynamicViewAttribute</span>(<span class="pl-s"><span class="pl-pds">"</span>textColor<span class="pl-pds">"</span></span>, colorResId));
 addSkinView(tv, attrs);</pre></div>
 
-<h5>
-<a id="342-自定义view" class="anchor" href="#342-%E8%87%AA%E5%AE%9A%E4%B9%89view" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.4.2 自定义View</h5>
-
-<p>自定义View需按以下规则定义，不需关心是在布局xml中还是手动addView。</p>
+<p>注意，<code>DynamicViewAttribute</code>里添加的资源id为默认主题的资源id。</p>
 
 <h6>
-<a id="--实现ondraw" class="anchor" href="#--%E5%AE%9E%E7%8E%B0ondraw" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>- 实现onDraw()</h6>
+<a id="原生view支持的换肤资源类型有colordrawable具体view类型的支持情况如下" class="anchor" href="#%E5%8E%9F%E7%94%9Fview%E6%94%AF%E6%8C%81%E7%9A%84%E6%8D%A2%E8%82%A4%E8%B5%84%E6%BA%90%E7%B1%BB%E5%9E%8B%E6%9C%89colordrawable%E5%85%B7%E4%BD%93view%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%AF%E6%8C%81%E6%83%85%E5%86%B5%E5%A6%82%E4%B8%8B" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>原生View支持的换肤资源类型有@color/<a href="https://github.com/drawable" class="user-mention">@drawable</a>，具体View类型的支持情况如下：</h6>
 
-<p>实现了onDraw()的自定义View，修改让其继承自CustomSkinView，在setSkinTheme()根据主题初始化资源，在onDraw()里设置资源。</p>
+<table>
+<thead>
+<tr>
+<th>View</th>
+<th align="left">属性</th>
+<th align="left">资源类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>View</td>
+<td align="left">background</td>
+<td align="left">@color/<a href="https://github.com/drawable" class="user-mention">@drawable</a>
+</td>
+</tr>
+<tr>
+<td>TextView</td>
+<td align="left">textColor</td>
+<td align="left"><a href="https://github.com/color" class="user-mention">@color</a></td>
+</tr>
+<tr>
+<td>TextView</td>
+<td align="left">drawableLeft/drawableTop/drawableRight/drawableBottom</td>
+<td align="left"><a href="https://github.com/drawable" class="user-mention">@drawable</a></td>
+</tr>
+<tr>
+<td>ImageView</td>
+<td align="left">src</td>
+<td align="left"><a href="https://github.com/drawable" class="user-mention">@drawable</a></td>
+</tr>
+<tr>
+<td>ListView</td>
+<td align="left">divider</td>
+<td align="left"><a href="https://github.com/color" class="user-mention">@color</a></td>
+</tr>
+<tr>
+<td>AbsListView</td>
+<td align="left">listSelector</td>
+<td align="left"><a href="https://github.com/drawable" class="user-mention">@drawable</a></td>
+</tr>
+</tbody>
+</table>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">SkinnableView</span> <span class="pl-k">extends</span> <span class="pl-e">CustomSkinView</span> {
-    <span class="pl-k">int</span> mColor;
+<p>注：手动addView暂不支持TextView的drawableLeft/drawableTop/drawableRight/drawableBottom属性。</p>
 
-    <span class="pl-k">@Override</span>
-    <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">setSkinTheme</span>(<span class="pl-smi">SkinTheme</span> <span class="pl-v">theme</span>) {
-        mColor <span class="pl-k">=</span> theme<span class="pl-k">.</span>getColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>textColor);
-    }
+<h5>
+<a id="342-有自定义属性的自定义view" class="anchor" href="#342-%E6%9C%89%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%9E%E6%80%A7%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89view" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.4.2 有自定义属性的自定义View</h5>
 
+<p>自定义View的基类如果是以上提到的View，对应支持的换肤属性按系统View处理，不接受自定义View的规则。
+若以上系统View的原生属性不能满足自定义View的换肤需求，自定义View需：</p>
+
+<ul>
+<li>实现<code>ICustomSkinView</code>接口，在<code>reSkin(SkinTheme)</code>里获取皮肤资源并设置。注意，自行实现了onDraw()的自定义View，reSkin()应先取theme下的属性值，再调用<code>invalidate()</code>刷新View。</li>
+<li>在<code>onAttachedToWindow()</code>/<code>onDetachedFromWindow()</code>添加/移除换肤管理，无需关注是在布局xml中还是手动addView()。注意该View是否属于Fragment，属于Fragment添加到Fragment的换肤管理，否则添加到Activity的换肤管理。</li>
+</ul>
+
+<p>以下两个小例子说明以上两点。</p>
+
+<p>自行实现<code>onDraw()</code>的自定义View，在Activity中：</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">CustomView</span> <span class="pl-k">extends</span> <span class="pl-e">View</span> <span class="pl-k">implements</span> <span class="pl-e">ICustomSkinView</span> {
+    <span class="pl-c1">...</span>
     <span class="pl-k">@Override</span>
     <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onDraw</span>(<span class="pl-smi">Canvas</span> <span class="pl-v">canvas</span>) {
-        <span class="pl-c1">...</span>
+        <span class="pl-v">super</span><span class="pl-k">.</span>onDraw(canvas);
         mPaint<span class="pl-k">.</span>setColor(mColor);
         <span class="pl-c1">...</span>
-    }   
-}</pre></div>
-
-<h6>
-<a id="--其它" class="anchor" href="#--%E5%85%B6%E5%AE%83" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>- 其它</h6>
-
-<p>未实现onDraw()的自定义View，需要自行实现<code>ICustomSkinView</code>接口，实现<code>reSkin()</code>方法设置换肤，并在<code>onAttachedToWindow()</code>/<code>onDetachedFromWindow()</code>添加/移除换肤管理。</p>
-
-<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">CustomLinearLayout</span> <span class="pl-k">extends</span> <span class="pl-e">LinearLayout</span> <span class="pl-k">implements</span> <span class="pl-e">ICustomSkinView</span> {
-    <span class="pl-k">int</span> mColor;
-    <span class="pl-c1">...</span>
-
-    <span class="pl-k">@Override</span>
-    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">reSkin</span>(<span class="pl-smi">SkinTheme</span> <span class="pl-v">theme</span>) {
-        <span class="pl-c">// 获取主题资源</span>
-        mColor <span class="pl-k">=</span> theme<span class="pl-k">.</span>getColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>textColor);
-        <span class="pl-c">// 设置主题资源</span>
-        setBackgroundColor(mColor);
     }
 
     <span class="pl-k">@Override</span>
     <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onAttachedToWindow</span>() {
         <span class="pl-v">super</span><span class="pl-k">.</span>onAttachedToWindow();
-        <span class="pl-c">// 添加到换肤管理</span>
-        ((<span class="pl-smi">BaseSkinActivity</span>) getContext())<span class="pl-k">.</span>addCustomView(<span class="pl-v">this</span>);
-        <span class="pl-c">// 初始化主题</span>
-        reSkin(<span class="pl-smi">SkinManager</span><span class="pl-k">.</span>getTheme());
+        mActivity<span class="pl-k">.</span>addCustomView(<span class="pl-v">this</span>);
     }
 
     <span class="pl-k">@Override</span>
     <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onDetachedFromWindow</span>() {
         <span class="pl-v">super</span><span class="pl-k">.</span>onDetachedFromWindow();
-        <span class="pl-c">// 移除换肤管理</span>
-        ((<span class="pl-smi">BaseSkinActivity</span>) getContext())<span class="pl-k">.</span>removeCustomView(<span class="pl-v">this</span>);
+        <span class="pl-k">try</span> {
+            mActivity<span class="pl-k">.</span>removeCustomView(<span class="pl-v">this</span>);
+        } <span class="pl-k">catch</span> (<span class="pl-smi">NullPointerException</span> e) {
+            <span class="pl-c">// 异常不需处理</span>
+        }
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">reSkin</span>(<span class="pl-smi">SkinTheme</span> <span class="pl-v">theme</span>) {
+        mColor <span class="pl-k">=</span> theme<span class="pl-k">.</span>getColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>textColor);
+
+        invalidate();
+    }
+}</pre></div>
+
+<p>支持TextView的linkTextColor属性换肤，在Fragment中：</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">CustomTextView</span> <span class="pl-k">extends</span> <span class="pl-e">TextView</span> <span class="pl-k">implements</span> <span class="pl-e">ICustomSkinView</span> {
+    <span class="pl-k">int</span> mColor;
+    <span class="pl-c1">...</span>
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">reSkin</span>(<span class="pl-smi">SkinTheme</span> <span class="pl-v">theme</span>) {
+        mColor <span class="pl-k">=</span> theme<span class="pl-k">.</span>getColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>linkColor);
+
+        setLinkTextColor(mColor);
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onAttachedToWindow</span>() {
+        <span class="pl-v">super</span><span class="pl-k">.</span>onAttachedToWindow();
+        mFragment<span class="pl-k">.</span>addCustomView(<span class="pl-v">this</span>);
+    }
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">void</span> <span class="pl-en">onDetachedFromWindow</span>() {
+        <span class="pl-v">super</span><span class="pl-k">.</span>onDetachedFromWindow();
+        <span class="pl-k">try</span> {
+            mFragment<span class="pl-k">.</span>removeCustomView(<span class="pl-v">this</span>);
+        } <span class="pl-k">catch</span> (<span class="pl-smi">NullPointerException</span> e) {
+        }
     }
 }</pre></div>
 
 <h4>
 <a id="35-触发换肤" class="anchor" href="#35-%E8%A7%A6%E5%8F%91%E6%8D%A2%E8%82%A4" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3.5 触发换肤</h4>
 
-<p>触发换肤的Activity主动设置全局的换肤主题，并通过调用<code>reSkin()</code>主动触发本Activity的换肤。其它Activity的换肤会在<code>onResume()</code>自行完成，不需主动触发。</p>
+<p>触发换肤时，应调用库中API<code>SkinManager.reSkin(SkinTheme, BaseSkinActivity)</code>，参数传入目标主题和当前所在Activity。
+其它Activity的换肤会在<code>onResume()</code>自行完成，不需主动触发。</p>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-k">void</span> changeSkin(<span class="pl-smi">SkinTheme</span> targetTheme) {
-    <span class="pl-smi">SkinManager</span><span class="pl-k">.</span>reSkin(targetTheme);
-    reSkin(targetTheme);
+    <span class="pl-smi">SkinManager</span><span class="pl-k">.</span>reSkin(targetTheme, <span class="pl-smi">BaseActivity</span><span class="pl-k">.</span><span class="pl-v">this</span>);
 }</pre></div>
+
+<p>触发换肤的Activity如果有Fragment，理论上应主动调用每个可见Fragment的reSkin()以实现当前界面的换肤(因为Fragment的onResume调不到了)。</p>
+
+<h2>
+<a id="tips" class="anchor" href="#tips" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tips</h2>
+
+<ol>
+<li>触发换肤后EventBus会post出全局事件ReskinEvent。有自定义需求的地方需要向EventBus进行注册/反注册,并实现onEvent(ReskinEvent)方法。换肤主题可通过<code>ReskinEvent.getTheme()</code>获取。</li>
+<li>使用系统的Color.Black或者在代码里硬编码资源(如直接把color的数值写在Java代码或布局xml里)的地方，需在xml里自定义资源。</li>
+<li>根据View是否在Fragment使用正确的LayoutInflater。Adapter在Activity/Fragment都可以使用，Adapter里需要使用LayoutInflate，应通过构造函数或者另开<code>setLayoutInflater(LayoutInflater)</code>接受参数。参数传递时UI应确定Adapter是否在Fragment的View里使用，获取正确的LayoutInflater。</li>
+<li>有自定义属性的自定义View根据View是否在Fragment使用正确的换肤管理。有自定义属性的自定义View在Activity/Fragment都可以使用，添加/移除自身到换肤管理时，应注意当前View是否在Fragment里使用。在Fragment里使用应添加到Fragment的换肤管理，直接被Activity使用应添加到Activity的换肤管理。</li>
+<li>有自定义属性的自定义View在退出一个界面时，onDetachedFromWindow()中移除换肤管理时可能出现Activity/Fragment已被销毁，应添加<code>try{}catch{}</code>保护。</li>
+<li>关于xml布局中系统原生View使用中间量资源。中间量资源只提供命名，不承载具体资源。如以下bg_temp就是一个临时color资源。这样的资源在布局时，从属性里读取的资源id为bg的id，而不是bg_temp的id。</li>
+</ol>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>bg_temp<span class="pl-pds">"</span></span>&gt;@color/bg&lt;/<span class="pl-ent">color</span>&gt;
+&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>bg<span class="pl-pds">"</span></span>&gt;#FF0000&lt;/<span class="pl-ent">color</span>&gt;</pre></div>
+
+<p>相应的，在主题资源命名时，应使用承载了具体资源值的资源。</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>bg<span class="pl-pds">"</span></span>&gt;#FF0000&lt;/<span class="pl-ent">color</span>&gt;
+&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>bg_whitemode<span class="pl-pds">"</span></span>&gt;#00FF00&lt;/<span class="pl-ent">color</span>&gt;
+&lt;<span class="pl-ent">color</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>bg_blackmode<span class="pl-pds">"</span></span>&gt;#0000FF&lt;/<span class="pl-ent">color</span>&gt;</pre></div>
+
+<p>中间量资源资源id的变化只针对这种情况，其它情况不受影响。
+7. selector是文件级别资源，实现换肤要新建文件，命名为原文件名+主题后缀的形式。</p>
       </section>
     </div>
 
