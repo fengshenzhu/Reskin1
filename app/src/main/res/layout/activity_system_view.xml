@@ -6,6 +6,21 @@
 
     <include layout="@layout/top"/>
 
+    <Button
+        android:id="@+id/inflateViewStub"
+        android:layout_width="match_parent"
+        android:text="ViewStub inflate"
+        android:layout_height="wrap_content"/>
+
+    <ViewStub
+        android:id="@+id/stub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="10dip"
+        android:layout="@layout/stub"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"

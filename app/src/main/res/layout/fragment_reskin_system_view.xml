@@ -4,6 +4,27 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/inflateViewStub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ViewStub inflate: "/>
+
+        <ViewStub
+            android:id="@+id/stub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="5dip"
+            android:layout_marginTop="10dip"
+            android:layout="@layout/stub"/>
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -67,6 +88,6 @@
         android:layout_height="wrap_content"
         android:divider="@color/bg_color"
         android:dividerHeight="10dp"
-        android:listSelector="@drawable/selector_list" />
+        android:listSelector="@drawable/selector_list"/>
 
 </LinearLayout>

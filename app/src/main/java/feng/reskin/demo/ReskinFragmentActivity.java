@@ -49,13 +49,15 @@ public class ReskinFragmentActivity extends BaseSkinActivity {
         int size = 5;
         final Fragment[] fragments = new Fragment[size];
         for (int i = 0; i < size; i++) {
-            fragments[i] = new ReskinFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("position", i);
-            fragments[i].setArguments(bundle);
+            if (i % 2 == 0) {
+                fragments[i] = new ReskinSystemViewFragment();
+            } else {
+                fragments[i] = new ReskinCustomViewFragment();
+            }
         }
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
