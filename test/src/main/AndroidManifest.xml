@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="skin.test"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:name=".TestApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".MainActivity"
+            android:label="Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ManyViewsActivity"
+            android:label="ManyViews">
+        </activity>
+        <activity
+            android:name=".ManyFragmentsActivity"
+            android:label="ManyFragments">
+        </activity>
+        <activity
+            android:name=".SettingActivity"
+            android:label="Setting">
+        </activity>
+    </application>
+
+</manifest>
