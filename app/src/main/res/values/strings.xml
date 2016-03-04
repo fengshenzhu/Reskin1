@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Reskin</string>
+    <string name="app_name">ReskinDemo</string>
 
-    <string name="demo_text">This is custom view default</string>
-    <string name="demo_text_night">This is custom view night</string>
+    <string name="demo_text">Custom View color/drawable/text DEFAULT</string>
+    <string name="demo_text_whitemode">Custom View color/drawable/text WHITE</string>
+    <string name="demo_text_blackmode">Custom View color/drawable/text BLACK</string>
+
 </resources>

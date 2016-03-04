@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/rootView"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <include layout="@layout/top" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="实现onDraw()的自定义View:"
+        android:layout_height="wrap_content"/>
+    <feng.reskin.demo.CustomView
+        android:id="@+id/customView"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="未实现onDraw()的自定义View:"
+        android:layout_height="wrap_content"/>
+
+    <feng.reskin.demo.CustomTextView
+        android:id="@+id/customTextView"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_height="50dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:text="手动addView的自定义View:"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

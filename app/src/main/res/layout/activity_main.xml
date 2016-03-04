@@ -1,45 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    android:id="@+id/root"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="feng.reskin.demo.MainActivity">
+
+    <include layout="@layout/top"/>
 
     <Button
-        android:id="@+id/change_theme"
+        android:id="@+id/systemView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Setting"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
         android:background="@drawable/image"
-        android:text="TextView textColor and background drawable"
+        android:text="原生View"
+        android:textAllCaps="false"
         android:textColor="@color/textColor"/>
 
-    <TextView
-        style="@style/styleTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/image"
-        android:drawableRight="@drawable/image"
-        android:drawableTop="@drawable/image"
-        android:drawableBottom="@drawable/image"
-        android:text="TextView textColor in style (drawable Left/Top/Right/Bottom)"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/image"/>
-
-    <skin.demo.SkinnableView
+    <Button
+        android:id="@+id/customView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/image"
+        android:text="自定义View"
+        android:textAllCaps="false"
+        android:textColor="@color/textColor"/>
 
-    <skin.demo.CustomLinearLayout
+    <Button
+        android:id="@+id/fragment"
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/image"
+        android:text="Fragment"
+        android:textAllCaps="false"
+        android:textColor="@color/textColor"/>
+
 
 </LinearLayout>

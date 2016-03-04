@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ReskinTest</string>
+
+    <string name="demo_text">Custom View color/drawable/text DEFAULT</string>
+    <string name="demo_text_whitemode">Custom View color/drawable/text WHITE</string>
+    <string name="demo_text_blackmode">Custom View color/drawable/text BLACK</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_custom_view_fragment">CustomViewFragmentActivity</string>
+    <string name="action_settings">Settings</string>
+</resources>

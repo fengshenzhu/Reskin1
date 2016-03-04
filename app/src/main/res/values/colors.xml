@@ -4,6 +4,19 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="textColor">#FF4081</color>
-    <color name="textColor_night">#3F51B5</color>
+    <color name="textColor">#ff0000</color>
+    <color name="textColor_whitemode">#00ff00</color>
+    <color name="textColor_blackmode">#0000ff</color>
+
+    <color name="bg_color">@color/bg_temp</color>
+    <color name="bg_color_whitemode">#000000</color>
+    <color name="bg_color_blackmode">#000000</color>
+
+    <color name="bg_temp">#d0d0d0</color>
+    <color name="bg_temp_whitemode">#ffffff</color>
+    <color name="bg_temp_blackmode">#8e8e8e</color>
+
+    <color name="red">#FF0000</color>
+    <color name="green">#00ff00</color>
+    <color name="blue">#0000ff</color>
 </resources>

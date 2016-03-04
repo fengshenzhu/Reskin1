@@ -1,14 +1,16 @@
 package skin.lib;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewStub;
+import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import skin.lib.item.ImageViewSrcItem;
+import skin.lib.item.ListViewDividerItem;
+import skin.lib.item.ListViewListSelectorItem;
 import skin.lib.item.TextViewCompoundDrawablesItem;
 import skin.lib.item.TextViewTextColorItem;
 import skin.lib.item.ViewBackgroundItem;
@@ -31,18 +35,14 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     private static final String TAG = "SkinLayoutInflaterFactory";
 
     /**
-     * 换肤支持的资源类型
-     */
-    private static final String RES_DRAWABLE = "drawable";
-    private static final String RES_COLOR = "color";
-
-    /**
      * 换肤支持的属性名
      */
     private static final String ATTR_VIEW_BACKGROUND = "background";
     private static final String ATTR_TEXTVIEW_TEXTCOLOR = "textColor";
     private static final String ATTR_TEXTVIEW_COMPOUNDDRAWABLES = "compoundDrawables";
     private static final String ATTR_IMAGEVIEW_SRC = "src";
+    private static final String ATTR_LISTVIEW_DIVIDER = "divider";
+    private static final String ATTR_ABSLISTVIEW_LISTSELECTOR = "listSelector";
 
     /**
      * 换肤支持的属性id
@@ -60,6 +60,12 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     };
     private final static int[] ATTRS_IMAGEVIEW = new int[]{
             android.R.attr.src
+    };
+    private final static int[] ATTRS_LISTVIEW = new int[]{
+            android.R.attr.divider
+    };
+    private final static int[] ATTRS_ABSLISTVIEW = new int[]{
+            android.R.attr.listSelector
     };
 
     /**
@@ -86,18 +92,32 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      */
     private List<ViewBackgroundItem> mViewBackgroundItems = new ArrayList<>();
     private List<TextViewTextColorItem> mTextViewTextColorItems = new ArrayList<>();
-    private List<TextViewCompoundDrawablesItem> mTextViewTextViewCompoundDrawablesItems = new
+    private List<TextViewCompoundDrawablesItem> mTextViewCompoundDrawablesItems = new
             ArrayList<>();
     private List<ImageViewSrcItem> mImageViewSrcItems = new ArrayList<>();
+    private List<ListViewDividerItem> mListDividerItems = new ArrayList<>();
+    private List<ListViewListSelectorItem> mListSelectorItems = new ArrayList<>();
+
 
     /**
      * 自定义View列表
      */
     private List<WeakReference<ICustomSkinView>> mCustomSkinViews = new ArrayList<>();
 
-    SkinLayoutInflaterFactory(Activity activity) {
-        mContext = activity;
+    /**
+     * 换肤Activity使用的构造方法
+     */
+    SkinLayoutInflaterFactory(BaseSkinActivity activity) {
+        mContext = activity.getApplicationContext();
         mLayoutInflater = activity.getLayoutInflater();
+    }
+
+    /**
+     * 换肤Fragment使用的构造方法
+     */
+    SkinLayoutInflaterFactory(BaseSkinFragment fragment, LayoutInflater layoutInflater) {
+        mContext = fragment.getActivity().getApplicationContext();
+        mLayoutInflater = layoutInflater;
     }
 
     /**
@@ -126,7 +146,13 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
         View view = createView(name, attrs);
 
         if (view != null) {
-            addSkinViewIfNecessary(view, attrs);
+            if (view instanceof ViewStub) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    ((ViewStub) view).setLayoutInflater(mLayoutInflater);
+                }
+            } else {
+                addSkinViewIfNecessary(view, attrs);
+            }
         } else {
             L.e(TAG, "Dangerous!!! You miss view " + name);
         }
@@ -149,6 +175,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
         for (String prefix : sClassPrefixList) {
             try {
                 view = mLayoutInflater.createView(name, prefix, attrs);
+                if (view != null) break;
             } catch (Exception e) {
             }
         }
@@ -186,7 +213,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
         if (view instanceof TextView) {
             int[] textViewResIds = getResIds(set, ATTRS_TEXTVIEW);
             int[] compoundDrawableResIds = new int[]{-1, -1, -1, -1};
-            boolean compundValid = false;
+            boolean compoundValid = false;
             for (int i = 0; i < textViewResIds.length; i++) {
                 if (textViewResIds[i] > MIN_CUSTOM_RESOURCE_ID) {
                     switch (i) {
@@ -195,30 +222,30 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
                             break;
                         case 1:
                             compoundDrawableResIds[0] = textViewResIds[i];
-                            compundValid = true;
+                            compoundValid = true;
                             break;
                         case 2:
                             compoundDrawableResIds[1] = textViewResIds[i];
-                            compundValid = true;
+                            compoundValid = true;
                             break;
                         case 3:
                             compoundDrawableResIds[2] = textViewResIds[i];
-                            compundValid = true;
+                            compoundValid = true;
                             break;
                         case 4:
                             compoundDrawableResIds[3] = textViewResIds[i];
-                            compundValid = true;
+                            compoundValid = true;
                             break;
                     }
                 }
             }
-            if (compundValid) {
+            if (compoundValid) {
                 addSkinView(view, ATTR_TEXTVIEW_COMPOUNDDRAWABLES, compoundDrawableResIds);
             }
 
         }
 
-        //ImageView
+        // ImageView
         if (view instanceof ImageView) {
             int[] imageViewResIds = getResIds(set, ATTRS_IMAGEVIEW);
             for (int i = 0; i < imageViewResIds.length; i++) {
@@ -231,8 +258,44 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
                 }
             }
         }
+
+        // AbsListView
+        if (view instanceof AbsListView) {
+            int[] absListViewResIds = getResIds(set, ATTRS_ABSLISTVIEW);
+            for (int i = 0; i < absListViewResIds.length; i++) {
+                if (absListViewResIds[i] > MIN_CUSTOM_RESOURCE_ID) {
+                    switch (i) {
+                        case 0:
+                            addSkinView(view, ATTR_ABSLISTVIEW_LISTSELECTOR, absListViewResIds[i]);
+                            break;
+                    }
+                }
+            }
+
+            // ListView
+            if (view instanceof ListView) {
+                int[] listViewResIds = getResIds(set, ATTRS_LISTVIEW);
+                for (int i = 0; i < listViewResIds.length; i++) {
+                    if (listViewResIds[i] > MIN_CUSTOM_RESOURCE_ID) {
+                        switch (i) {
+                            case 0:
+                                addSkinView(view, ATTR_LISTVIEW_DIVIDER, listViewResIds[i]);
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
+    /**
+     * 注意该方法可能获取的资源id与xml布局中申明的不一致.
+     * 不一致的情况:xml布局中申明的资源是一个临时资源,如:
+     * <color name="temp">@color/red</color>
+     * <color name="red">#FF0000</color>
+     * 获取的id为R.color.red的id.
+     */
     private int[] getResIds(AttributeSet set, int[] attrs) {
         int[] resIds = new int[attrs.length];
         for (int i = 0; i < resIds.length; i++) {
@@ -260,7 +323,7 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      */
     void addSkinViewIfNecessary(View view, List<DynamicViewAttribute> attrs) {
         for (DynamicViewAttribute attr : attrs) {
-            addSkinView(view, attr.attrName, attr.resId);
+            addSkinView(view, attr.mAttrName, attr.mResId);
         }
     }
 
@@ -283,6 +346,12 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
             case ATTR_IMAGEVIEW_SRC:
                 mImageViewSrcItems.add(new ImageViewSrcItem((ImageView) view, resId));
                 break;
+            case ATTR_LISTVIEW_DIVIDER:
+                mListDividerItems.add(new ListViewDividerItem((ListView) view, resId));
+                break;
+            case ATTR_ABSLISTVIEW_LISTSELECTOR:
+                mListSelectorItems.add(new ListViewListSelectorItem((AbsListView) view, resId));
+                break;
         }
     }
 
@@ -296,18 +365,19 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     private void addSkinView(View view, String attrName, int[] resIds) {
         switch (attrName) {
             case ATTR_TEXTVIEW_COMPOUNDDRAWABLES:
-                mTextViewTextViewCompoundDrawablesItems.add(new TextViewCompoundDrawablesItem(
+                mTextViewCompoundDrawablesItems.add(new TextViewCompoundDrawablesItem(
                         (TextView) view, resIds[2], resIds[0], resIds[3], resIds[1]));
                 break;
         }
     }
 
     /**
-     * 记录需要修改主题的View及其属性
+     * 记录需要修改主题的View及其属性,添加时调用一次reSkin()以实现初始化
      *
      * @param view 自定义的View
      */
     void addCustomView(ICustomSkinView view) {
+        view.reSkin(SkinManager.getTheme());
         mCustomSkinViews.add(new WeakReference<>(view));
     }
 
@@ -318,9 +388,10 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      */
     void removeCustomView(ICustomSkinView view) {
         for (WeakReference<ICustomSkinView> ref : mCustomSkinViews) {
-            if (ref.get() != null && ref.get() == view) {
+            ICustomSkinView refView = ref.get();
+            if (refView != null && refView == view) {
                 mCustomSkinViews.remove(ref);
-                return;
+                break;
             }
         }
     }
@@ -329,69 +400,31 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
      * 修改主题
      */
     void reSkin(SkinTheme theme) {
-        for (TextViewTextColorItem item : mTextViewTextColorItems) {
-            TextView textView = item.view.get();
-            if (textView != null) {
-                try {
-                    textView.setTextColor(theme.getColor(item.resId));
-                } catch (Resources.NotFoundException e) {
-                    // 找不到主题资源不改变属性值，异常不处理。以下异常捕捉处同。
-                }
-            }
-        }
-
-        for (TextViewCompoundDrawablesItem item : mTextViewTextViewCompoundDrawablesItems) {
-            TextView textView = item.view.get();
-            if (textView != null) {
-                try {
-                    textView.setCompoundDrawablesWithIntrinsicBounds(
-                            item.leftDrawableResId > 0 ? theme.getDrawable(item
-                                    .leftDrawableResId) : null,
-                            item.topDrawableResId > 0 ? theme.getDrawable(item.topDrawableResId)
-                                    : null,
-                            item.rightDrawableResId > 0 ? theme.getDrawable(item
-                                    .rightDrawableResId) : null,
-                            item.bottomDrawableResId > 0 ? theme.getDrawable(item
-                                    .bottomDrawableResId) : null);
-                } catch (Resources.NotFoundException e) {
-                    // 找不到主题资源不改变属性值，异常不处理。以下异常捕捉处同。
-                }
-            }
-        }
-
-        for (ImageViewSrcItem item : mImageViewSrcItems) {
-            ImageView imageView = item.view.get();
-            if (imageView != null) {
-                try {
-                    imageView.setImageDrawable(theme.getDrawable(item.resId));
-                } catch (Resources.NotFoundException e) {
-                }
-            }
-        }
-
         for (ViewBackgroundItem item : mViewBackgroundItems) {
-            View view = item.view.get();
-            if (view != null) {
-                if (item.typeName.equals(RES_COLOR)) {
-                    try {
-                        view.setBackgroundColor(theme.getColor(item.resId));
-                    } catch (Resources.NotFoundException e) {
-                    }
-                } else if (item.typeName.equals(RES_DRAWABLE)) {
-                    try {
-                        view.setBackgroundDrawable(theme.getDrawable(item.resId));
-                    } catch (Resources.NotFoundException e) {
-                    }
-                }
-            }
+            item.reSkinIfNecessary(theme);
+        }
+        for (TextViewTextColorItem item : mTextViewTextColorItems) {
+            item.reSkinIfNecessary(theme);
+        }
+        for (TextViewCompoundDrawablesItem item : mTextViewCompoundDrawablesItems) {
+            item.reSkinIfNecessary(theme);
+        }
+        for (ImageViewSrcItem item : mImageViewSrcItems) {
+            item.reSkinIfNecessary(theme);
+        }
+        for (ListViewDividerItem item : mListDividerItems) {
+            item.reSkinIfNecessary(theme);
+        }
+        for (ListViewListSelectorItem item : mListSelectorItems) {
+            item.reSkinIfNecessary(theme);
         }
 
         for (WeakReference<ICustomSkinView> ref : mCustomSkinViews) {
-            if (ref.get() != null) {
-                ref.get().reSkin(theme);
+            ICustomSkinView view = ref.get();
+            if (view != null) {
+                view.reSkin(theme);
             }
         }
-
     }
 
     /**
@@ -400,7 +433,10 @@ class SkinLayoutInflaterFactory implements LayoutInflater.Factory {
     void clear() {
         mViewBackgroundItems.clear();
         mTextViewTextColorItems.clear();
+        mTextViewCompoundDrawablesItems.clear();
         mImageViewSrcItems.clear();
+        mListDividerItems.clear();
+        mListSelectorItems.clear();
 
         mCustomSkinViews.clear();
     }
