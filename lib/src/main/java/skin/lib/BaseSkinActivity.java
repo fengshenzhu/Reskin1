@@ -1,7 +1,7 @@
 package skin.lib;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * <p/>
  * Created by fengshzh on 1/21/16.
  */
-public abstract class BaseSkinActivity extends FragmentActivity implements IDynamicViewAdd,
+public abstract class BaseSkinActivity extends AppCompatActivity implements IDynamicViewAdd,
         ICustomViewAdd {
     private static final String TAG = "BaseSkinActivity";
 
@@ -72,7 +72,6 @@ public abstract class BaseSkinActivity extends FragmentActivity implements IDyna
     protected void onDestroy() {
         super.onDestroy();
         mSkinLayoutInflaterFactory.clear();
-        mSkinLayoutInflaterFactory = null;
     }
 
     /**
@@ -98,7 +97,7 @@ public abstract class BaseSkinActivity extends FragmentActivity implements IDyna
     }
 
     /**
-     * 添加自定义View
+     * 添加自定义View,包括Fragment里的
      *
      * @param view 自定义的View
      */
@@ -108,7 +107,7 @@ public abstract class BaseSkinActivity extends FragmentActivity implements IDyna
     }
 
     /**
-     * 移除自定义View
+     * 移除自定义View,包括Fragment里的
      *
      * @param view 自定义的View
      */

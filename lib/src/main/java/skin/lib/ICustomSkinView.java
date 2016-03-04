@@ -2,10 +2,11 @@ package skin.lib;
 
 /**
  * 自定义View实现换肤的接口,支持换肤的自定义View需要实现此接口.
+ * 确保自定义View构造函数传入的Context为其所属的Activity
  * 自定义View的换肤管理目前都在BaseSkinActivity里(),包括Activity里Fragment的自定义View.
  * <p/>
  * 使用方法:
- * (1). 在onAttachedToWindow()添加View到换肤管理.
+ * (1). 在onAttachedToWindow()添加View到Activity的换肤管理.
  * 添加时会触发一次reSkin()方法,以实现当前View的主题初始化.
  * 如:
  * @Override protected void onAttachedToWindow() {
@@ -13,7 +14,7 @@ package skin.lib;
  * ((BaseSkinActivity) getContext()).addCustomView(this);
  * }
  * <p/>
- * (2). 在onDetachedFromWindow()将View从换肤管理中移除
+ * (2). 在onDetachedFromWindow()将View从Activity的换肤管理中移除
  * 移除时防止Activity已被回收需手动捕捉异常.
  * 如:
  * @Override protected void onDetachedFromWindow() {
@@ -32,7 +33,7 @@ package skin.lib;
  * setBackgroundColor(mColor);
  * // 自行实现了onDraw()的自定义View调用invalidate()设置资源
  * }
- * a). onDraw()里设置
+ * b). onDraw()里设置
  * int mColor;
  * @Override public void reSkin(SkinTheme theme) {
  * int mColor = theme.getColor(R.color.textColor);

@@ -9,11 +9,11 @@ import java.util.List;
 
 /**
  * 换肤基类Fragment
+ * 自定义View的换肤管理不放在Fragment里,放在所属Activity里.
  * <p/>
  * Created by fengshzh on 16/2/18.
  */
-public abstract class BaseSkinFragment extends Fragment implements IDynamicViewAdd,
-        ICustomViewAdd {
+public abstract class BaseSkinFragment extends Fragment implements IDynamicViewAdd {
     private static final String TAG = "BaseSkinFragment";
     private long mStartTime = 0;
     private LayoutInflater mLayoutInflater;
@@ -74,7 +74,6 @@ public abstract class BaseSkinFragment extends Fragment implements IDynamicViewA
         super.onDestroy();
 
         mSkinLayoutInflaterFactory.clear();
-        mSkinLayoutInflaterFactory = null;
     }
 
     /**
@@ -97,25 +96,5 @@ public abstract class BaseSkinFragment extends Fragment implements IDynamicViewA
     @Override
     final public void addSkinView(View view, List<DynamicViewAttribute> attrs) {
         mSkinLayoutInflaterFactory.addSkinViewIfNecessary(view, attrs);
-    }
-
-    /**
-     * 添加自定义View
-     *
-     * @param view 自定义的View
-     */
-    @Override
-    final public void addCustomView(ICustomSkinView view) {
-        mSkinLayoutInflaterFactory.addCustomView(view);
-    }
-
-    /**
-     * 移除自定义View
-     *
-     * @param view 自定义的View
-     */
-    @Override
-    final public void removeCustomView(ICustomSkinView view) {
-        mSkinLayoutInflaterFactory.removeCustomView(view);
     }
 }
