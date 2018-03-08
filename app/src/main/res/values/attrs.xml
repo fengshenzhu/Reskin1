@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <declare-styleable name="QuoteDividerBar">
+        <attr name="left_text" format="reference|string"></attr>
+        <attr name="right_text" format="reference|string"></attr>
+        <attr name="right_drawable" format="reference"></attr>
+        <attr name="left_textSize" format="reference|dimension"></attr>
+        <attr name="right_textSize" format="reference|dimension"></attr>
+        <attr name="left_textColor" format="reference|color"></attr>
+        <attr name="right_textColor" format="reference|color"></attr>
+        <attr name="right_textVisibility">
+            <enum name="visible" value="0"></enum>
+            <enum name="invisible" value="4"></enum>
+            <enum name="gone" value="8"></enum>
+        </attr>
+    </declare-styleable>
+
+
+</resources>

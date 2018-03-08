@@ -16,7 +16,7 @@ public class SettingActivity extends BaseSkinActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
     }
 
     @Override

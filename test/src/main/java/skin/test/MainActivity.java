@@ -18,7 +18,7 @@ public class MainActivity extends BaseSkinActivity {
         setContentView(R.layout.activity_main_test);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
     }
 
     @Override

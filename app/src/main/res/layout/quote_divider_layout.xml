@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/black202020" >
+
+    <TextView
+        android:id="@+id/quote_divider_title"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10.0dip"
+        android:gravity="left|center_vertical"
+        android:text="Title"
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/TextSize_15" />
+
+    <TextView
+        android:textColor="@color/textColor"
+        android:id="@+id/quote_divider_more"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10.0dip"
+        android:drawableRight="@drawable/quote_arrow"
+        android:gravity="center_vertical"
+        android:text="more" />
+
+    <LinearLayout
+        android:id="@+id/quote_divider_blank"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toLeftOf="@id/quote_divider_more"
+        android:layout_toRightOf="@id/quote_divider_title"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+</RelativeLayout>

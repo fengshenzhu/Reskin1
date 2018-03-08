@@ -22,7 +22,7 @@ public class ManyFragmentsActivity extends BaseSkinActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_many_fragments);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
